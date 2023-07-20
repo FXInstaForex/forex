@@ -9,8 +9,8 @@ FROM eclipse-temurin:8-jdk-jammy
 WORKDIR /etc
 RUN mkdir -p ./app/VMconnection
 COPY /VMconnection /etc/app/VMconnection/
-RUN chmod +x /etc/app/VMconnection/scripts/runPartyA.bash
+RUN chmod +x /etc/app/VMconnection/scripts/runNotary.bash
 
 #FROM eclipse-temurin:8-jdk-jammy
-#ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
-CMD ["/bin/bash","-c","/etc/app/VMconnection/scripts/runPartyA.bash"]
+#ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/Notary/corda.jar"]
+CMD ["/bin/bash","-c","/etc/app/VMconnection/scripts/runNotary.bash"]
