@@ -1,0 +1,56 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew      
+      run: chmod +x gradlew
+
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: latest        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Deploy to Azure VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZ_VM_IP }}
+        username: ${{ secrets.AZ_VM_USERNAME }}
+        key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          eval "$(ssh-agent)"
+          ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull wfsettlement/fxinsta-sample:latest
+          docker run -d -p 5000:5000 wfsettlement/fxinsta-sample:latest        
