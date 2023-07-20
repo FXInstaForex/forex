@@ -37,7 +37,7 @@ jobs:
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyA     
-        file: ./Dockerfile_PartyA        
+        dockerfile: ./Dockerfile_PartyA        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -47,7 +47,7 @@ jobs:
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyB
-        file: ./Dockerfile_PartyB        
+        dockerfile: ./Dockerfile_PartyB        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -57,7 +57,7 @@ jobs:
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyC
-        file: ./Dockerfile_PartyC        
+        dockerfile: ./Dockerfile_PartyC        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
@@ -67,7 +67,7 @@ jobs:
       with:
         image: wfsettlement/fxinsta-sample
         tags: Notary
-        file: ./Dockerfile_Notary
+        dockerfile: ./Dockerfile_Notary
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}        
