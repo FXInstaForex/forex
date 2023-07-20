@@ -32,42 +32,42 @@ jobs:
     - name: Grant execute permission for gradlew      
       run: chmod +x gradlew
 
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Image PartyA
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyA     
-        file: Dockerfile_PartyA        
+        file: ./Dockerfile_PartyA        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Image PartyB
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyB
-        file: Dockerfile_PartyB        
+        file: ./Dockerfile_PartyB        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Image PartyC
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: wfsettlement/fxinsta-sample
         tags: PartyC
-        file: Dockerfile_PartyC        
+        file: ./Dockerfile_PartyC        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Image Notary
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: wfsettlement/fxinsta-sample
         tags: Notary
-        file: Dockerfile_Notary
+        file: ./Dockerfile_Notary
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}        
