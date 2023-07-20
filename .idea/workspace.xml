@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ae2f70c6-dd38-4990-8c82-5e6cc0a19567" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/BalanceContractPartyB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/KYContract.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/PartyANostroContract.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/PartyBNostroContract.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/PartyANostroState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/PartyBNostroState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/PartyBalanceStateA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/PartyBalanceStateB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/KYCFlow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/PartyAUpdateNostroBalanceFlow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/PartyBUpdateBalanceFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/jarAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.6.4/javaCompile/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/cordapp-example-0.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/instaforex-0.1.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/certificates/nodekeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/certificates/nodekeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/certificates/sslkeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/certificates/sslkeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/certificates/truststore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/certificates/truststore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/cordapps/contracts-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/cordapps/contracts-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/cordapps/workflows-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/cordapps/workflows-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/checkpoints_agent-20230719-142530.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/checkpoints_agent-20230719-142620.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/checkpoints_agent-20230719-142657.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/node-LAPTOP-EAVPVSHG.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/logs/node-LAPTOP-EAVPVSHG.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/node-info-gen.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/logs/node-info-gen.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/node-run-migration.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/logs/node-run-migration.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/logs/node-schema-cordform.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/logs/node-schema-cordform.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/network-parameters" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/network-parameters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/persistence.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/persistence.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/persistence.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/persistence.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/Notary/process-id" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/Notary/process-id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/certificates/nodekeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/certificates/nodekeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/certificates/sslkeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/certificates/sslkeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/certificates/truststore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/certificates/truststore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/cordapps/contracts-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/cordapps/contracts-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/cordapps/workflows-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/cordapps/workflows-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/checkpoints_agent-20230719-142530.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/checkpoints_agent-20230719-142620.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/checkpoints_agent-20230719-142715.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-LAPTOP-EAVPVSHG.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-LAPTOP-EAVPVSHG.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-info-gen.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-info-gen.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-run-migration.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-run-migration.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-schema-cordform.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/logs/node-schema-cordform.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/network-parameters" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/network-parameters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/persistence.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/persistence.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/persistence.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/persistence.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyA/process-id" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyA/process-id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/certificates/nodekeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/certificates/nodekeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/certificates/sslkeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/certificates/sslkeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/certificates/truststore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/certificates/truststore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/cordapps/contracts-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/cordapps/contracts-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/cordapps/workflows-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/cordapps/workflows-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/checkpoints_agent-20230719-142527.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/checkpoints_agent-20230719-142614.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/checkpoints_agent-20230719-142742.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-LAPTOP-EAVPVSHG.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-LAPTOP-EAVPVSHG.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-info-gen.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-info-gen.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-run-migration.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-run-migration.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-schema-cordform.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/logs/node-schema-cordform.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/network-parameters" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/network-parameters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/persistence.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/persistence.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/persistence.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/persistence.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyB/process-id" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyB/process-id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-777DA369F066FE34BEDE3E6334A1006A4026A02DD76AFA798204BD015C9965DE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-B1F1FD9F15FCFDE1C9EE7A59504A44D669AB67B655597D60B691138E9C12E93C" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-E4477B559304AADFC0638772C0956A38FA2E2A7A5EB0E65D0D83E5884831879A" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/additional-node-infos/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/certificates/nodekeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/certificates/nodekeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/certificates/sslkeystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/certificates/sslkeystore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/certificates/truststore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/certificates/truststore.jks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/cordapps/contracts-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/cordapps/contracts-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/cordapps/workflows-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/cordapps/workflows-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/checkpoints_agent-20230719-142530.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/checkpoints_agent-20230719-142620.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/checkpoints_agent-20230719-142816.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-LAPTOP-EAVPVSHG.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-LAPTOP-EAVPVSHG.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-info-gen.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-info-gen.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-run-migration.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-run-migration.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-schema-cordform.log" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/logs/node-schema-cordform.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/network-parameters" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/network-parameters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/nodeInfo-F84B822AE25EB5993D452B1916E3E5E8E766BE912519A0DA1682A4C717B336A2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/persistence.mv.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/persistence.mv.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/persistence.trace.db" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/persistence.trace.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/nodes/PartyC/process-id" beforeDir="false" afterPath="$PROJECT_DIR$/build/nodes/PartyC/process-id" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/contracts/BalanceContractPartyA$Commands$UpdateBalance.class" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/contracts/BalanceContractPartyA$Commands$UpdateBalance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/contracts/BalanceContractPartyA.class" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/contracts/BalanceContractPartyA.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/states/IOUState.class" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/states/IOUState.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/bin/main/net/corda/samples/example/states/PartyABalanceState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/build/libs/contracts-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/build/libs/contracts-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/BalanceContractPartyA.java" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/contracts/BalanceContractPartyA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/IOUState.java" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/IOUState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/PartyABalanceState.java" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/src/main/java/net/corda/samples/example/states/KYCState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/contracts/src/test/java/net/corda/samples/example/contracts/ContractTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/contracts/src/test/java/net/corda/samples/example/contracts/ContractTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow$Initiator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/ExampleFlow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/FXTrade19July.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/FXTrade19July.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/FXTradeFlow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/NodeValidationUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/PartyAUpdateBalanceFlow.class" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/PartyAUpdateBalanceFlow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/SubmitTradeAgreementFlow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/bin/main/net/corda/samples/example/flows/TradeAgreementFlow.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/build/libs/workflows-0.1.jar" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/build/libs/workflows-0.1.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/ExampleFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/ExampleFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/FXTrade19July.java" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/FXTrade19July.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/FXTradeFlow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/NodeValidationUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/PartyAUpdateBalanceFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/PartyAUpdateBalanceFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/SubmitTradeAgreementFlow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/main/java/net/corda/samples/example/flows/TradeAgreementFlow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/workflows/src/test/java/net/corda/samples/example/FlowTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/workflows/src/test/java/net/corda/samples/example/FlowTests.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sample" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="1lyrLNggqOnZplsX0yKPQgsNZ4g" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/workspace/sample",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "spring.configuration.checksum": "8c03efa9b58e95f6e90b6765c6c3748a",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\workspace\sample" />
+      <recent name="D:\workspace\instaforex\samples-java\Basic\cordapp-example\contracts\src\main\java\net\corda\samples\example\contracts" />
+      <recent name="D:\workspace\instaforex\samples-java\Basic\cordapp-example\workflows\src\main\java\net\corda\samples\example\flows" />
+      <recent name="D:\workspace\instaforex\samples-java\Basic\cordapp-example\contracts\src\main\java\net\corda\samples\example\states" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.corda.samples.example.flows" />
+      <recent name="net.corda.samples.example.contracts" />
+      <recent name="net.corda.samples.example.states" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle clean" />
+      <command value="gradle deployNodes" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.sample [deployNodes]">
+    <configuration name="D:/workspace/instaforex/cordapp-example [deployNodes]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="deployNodes" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="cordapp-example [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="cordapp-example [deployNodes]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="deployNodes" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="sample [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="sample [deployNodes]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="deployNodes" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="Starter" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="cordapp-example.clients.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="net.corda.samples.example.webserver.Starter" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.sample [clean]" />
+      <item itemvalue="Gradle.sample [deployNodes]" />
+      <item itemvalue="Gradle.D:/workspace/instaforex/cordapp-example [deployNodes]" />
+      <item itemvalue="Gradle.cordapp-example [clean]" />
+      <item itemvalue="Gradle.cordapp-example [deployNodes]" />
+      <item itemvalue="Spring Boot.Starter" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.sample [clean]" />
+        <item itemvalue="Gradle.sample [deployNodes]" />
+        <item itemvalue="Gradle.D:/workspace/instaforex/cordapp-example [deployNodes]" />
+        <item itemvalue="Gradle.cordapp-example [deployNodes]" />
+        <item itemvalue="Gradle.cordapp-example [clean]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ae2f70c6-dd38-4990-8c82-5e6cc0a19567" name="Default Changelist" comment="" />
+      <created>1608580114235</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1608580114235</updated>
+      <workItem from="1689218422663" duration="10667000" />
+      <workItem from="1689442782926" duration="17076000" />
+      <workItem from="1689559909784" duration="5181000" />
+      <workItem from="1689584791232" duration="19875000" />
+      <workItem from="1689682855981" duration="16186000" />
+      <workItem from="1689756328540" duration="203000" />
+      <workItem from="1689757554387" duration="3662000" />
+      <workItem from="1689778323047" duration="11658000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
