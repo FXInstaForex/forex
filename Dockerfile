@@ -5,9 +5,10 @@
 
 FROM ubuntu:latest
 #RUN mkdir -p /etc/app
+WORKDIR /etc
 RUN mkdir -p ./app
-COPY /VMconnection ./app/
+COPY /VMconnection /etc/app/
 
 FROM eclipse-temurin:8-jdk-jammy
-ENTRYPOINT ["java", "-jar", "./app/VMconnection/PartyA/corda.jar"]
-CMD ["java", "-jar", "./app/VMconnection/PartyA/corda.jar"]
+ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
+CMD ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
