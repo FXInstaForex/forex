@@ -36,10 +36,41 @@ jobs:
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
         image: wfsettlement/fxinsta-sample
-        tags: latest        
+        tags: PartyA     
+        file: Dockerfile_PartyA        
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: PartyB
+        file: Dockerfile_PartyB        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: PartyC
+        file: Dockerfile_PartyC        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: Notary
+        file: Dockerfile_Notary
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}        
 
     - name: Deploy to Azure VM
       uses: appleboy/ssh-action@master
@@ -52,5 +83,11 @@ jobs:
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull wfsettlement/fxinsta-sample:latest
-          docker run -d -p 5000:5000 wfsettlement/fxinsta-sample:latest        
+          docker pull wfsettlement/fxinsta-sample:PartyA
+          docker run -d -p 5000:5000 wfsettlement/fxinsta-sample:PartyA
+          docker pull wfsettlement/fxinsta-sample:PartyB
+          docker run -d -p 5001:5001 wfsettlement/fxinsta-sample:PartyB
+          docker pull wfsettlement/fxinsta-sample:PartyC
+          docker run -d -p 5002:5002 wfsettlement/fxinsta-sample:PartyC
+          docker pull wfsettlement/fxinsta-sample:Notary
+          docker run -d -p 5003:5003 wfsettlement/fxinsta-sample:Notary          
