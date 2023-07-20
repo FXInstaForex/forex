@@ -8,5 +8,5 @@ RUN mkdir -p /etc/app
 COPY /VMconnection /etc/app/
 
 FROM eclipse-temurin:8-jdk-jammy
-ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/docker.jar"]
-CMD ["java", "-jar", "/etc/app/VMconnection/PartyA/docker.jar"]
+ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
+CMD ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
