@@ -9,6 +9,7 @@ FROM eclipse-temurin:8-jdk-jammy
 WORKDIR /etc
 RUN mkdir -p ./app/VMconnection
 COPY /VMconnection /etc/app/VMconnection/
+RUN chmod +x /etc/app/VMconnection/scripts/runPartyA.bash
 
 #FROM eclipse-temurin:8-jdk-jammy
 #ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
