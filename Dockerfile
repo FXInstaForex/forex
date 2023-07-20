@@ -11,5 +11,5 @@ RUN mkdir -p ./app/VMconnection
 COPY /VMconnection /etc/app/VMconnection/
 
 #FROM eclipse-temurin:8-jdk-jammy
-ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
-CMD ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
+#ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
+CMD ["/bin/bash/","-c","/etc/app/VMconnection/scripts/runPartyA.bash"]
