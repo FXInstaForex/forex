@@ -5,6 +5,6 @@
 
 FROM ubuntu:latest
 RUN mkdir -p /etc/app
-COPY /VMConnection /etc/app/
-ENTRYPOINT ["java", "-jar", "/etc/app/VMConnection/PartyA/docker.jar"]
-CMD ["java", "-jar", "/etc/app/VMConnection/PartyA/docker.jar"]
+COPY /VMconnection /etc/app/
+ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/docker.jar"]
+CMD ["java", "-jar", "/etc/app/VMconnection/PartyA/docker.jar"]
