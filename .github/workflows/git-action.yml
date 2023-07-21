@@ -84,10 +84,10 @@ jobs:
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull wfsettlement/fxinsta-sample:PartyA
-          docker run -d -p 5000:5000 wfsettlement/fxinsta-sample:PartyA
+          docker run -d wfsettlement/fxinsta-sample:PartyA
           docker pull wfsettlement/fxinsta-sample:PartyB
-          docker run -d -p 5001:5001 wfsettlement/fxinsta-sample:PartyB
+          docker run -d wfsettlement/fxinsta-sample:PartyB
           docker pull wfsettlement/fxinsta-sample:PartyC
-          docker run -d -p 5002:5002 wfsettlement/fxinsta-sample:PartyC
+          docker run -d wfsettlement/fxinsta-sample:PartyC
           docker pull wfsettlement/fxinsta-sample:Notary
-          docker run -d -p 5003:5003 wfsettlement/fxinsta-sample:Notary          
+          docker run -d wfsettlement/fxinsta-sample:Notary
