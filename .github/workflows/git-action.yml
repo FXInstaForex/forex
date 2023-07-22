@@ -84,11 +84,11 @@ jobs:
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull wfsettlement/fxinsta-sample:PartyA
-          docker run -d wfsettlement/fxinsta-sample:PartyA
+          docker run --name fxinsta_partya -d wfsettlement/fxinsta-sample:PartyA
           docker pull wfsettlement/fxinsta-sample:PartyB
-          docker run -d wfsettlement/fxinsta-sample:PartyB
+          docker run --name fxinsta_partyb -d wfsettlement/fxinsta-sample:PartyB
           docker pull wfsettlement/fxinsta-sample:PartyC
-          docker run -d wfsettlement/fxinsta-sample:PartyC
+          docker run --name fxinsta_partyc -d wfsettlement/fxinsta-sample:PartyC
           docker pull wfsettlement/fxinsta-sample:Notary
-          docker run -d wfsettlement/fxinsta-sample:Notary
-          docker run --name postgres_for_corda -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
+          docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary
+          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
