@@ -91,3 +91,4 @@ jobs:
           docker run -d wfsettlement/fxinsta-sample:PartyC
           docker pull wfsettlement/fxinsta-sample:Notary
           docker run -d wfsettlement/fxinsta-sample:Notary
+          docker run --name postgres_for_corda -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
