@@ -1,2 +1,2 @@
-cd /etc/app/VMconnection/PartyA
+cd /etc/app/forex-v1/VMconnection/PartyA
 java -jar corda.jar
