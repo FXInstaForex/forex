@@ -16,11 +16,13 @@ import static java.util.Collections.emptyList;
 public class PartyAUpdateBalanceFlow extends FlowLogic<Void> {
     private final double amount ;
     private final Party issuer;
+    private final String status;
 
-    public PartyAUpdateBalanceFlow(double amount, Party issuer) {
+    public PartyAUpdateBalanceFlow(double amount, Party issuer, String status) {
         this.amount = amount;
         this.issuer = issuer;
 
+        this.status = status;
     }
 
     private static final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction");
@@ -39,7 +41,7 @@ public class PartyAUpdateBalanceFlow extends FlowLogic<Void> {
     @Suspendable
     public Void call() throws FlowException {
         final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(new PartyABalanceState(amount,  issuer))
+                .addOutputState(new PartyABalanceState(amount,  issuer, status))
                 .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), issuer.getOwningKey());
 
         progressTracker.setCurrentStep(GENERATING_TRANSACTION);

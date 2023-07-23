@@ -1,28 +1,24 @@
 package net.corda.samples.example.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.ImmutableSet;
-import net.corda.core.contracts.Command;
 import net.corda.core.contracts.StateAndRef;
-import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.flows.*;
+import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 import net.corda.samples.example.contracts.BalanceContractPartyB;
-import net.corda.samples.example.contracts.IOUContract;
 import net.corda.samples.example.flows.vault.QueryFlowB;
-import net.corda.samples.example.states.IOUState;
 import net.corda.samples.example.states.PartyBalanceStateB;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @InitiatingFlow
 @StartableByRPC
-public class SettleFlow extends FlowLogic<Void> {
+public class SettleFlow extends FlowLogic<SignedTransaction> {
     private final double tranAmt ;
     private final Party lender;
 
@@ -30,12 +26,15 @@ private final Party borrower;
 
 
 
-    public SettleFlow(double tranAmt, Party lender, Party borrower) {
+
+
+    public SettleFlow(double tranAmt, Party lender, Party borrower, String status) {
         this.tranAmt = tranAmt;
         this.lender = lender;
 
 
         this.borrower = borrower;
+
     }
 
     private static final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction");
@@ -52,51 +51,42 @@ private final Party borrower;
 
     @Override
     @Suspendable
-    public Void call() throws FlowException {
+    public SignedTransaction call() throws FlowException {
         StateAndRef< PartyBalanceStateB > responseB= subFlow(new QueryFlowB(lender));
         final PartyBalanceStateB oldIOUState = responseB.getState().getData();
         double previousAmount = oldIOUState.getAmount();
         double  amount= previousAmount - (tranAmt);
-        final PartyBalanceStateB newIOUState = new PartyBalanceStateB(amount,lender);
+        final PartyBalanceStateB newPartyBalanceStateB = new PartyBalanceStateB(amount,lender,"CONSUMED");
+
        // System.out.println("Inside settlementInitiatorB :: tranAmt"+tranAmt);
         //System.out.println("Inside settlementInitiatorB ::previousAmount)"+previousAmount);
         System.out.println("Inside settlementInitiatorB :: finalamout"+amount);
+///.addInputState(responseB)
+TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0));
+                builder.addOutputState(newPartyBalanceStateB, BalanceContractPartyB.BalanceContractPartyBID)
+                        .addInputState(responseB)
+                .addCommand(new BalanceContractPartyB.Commands.UpdateBalance(), newPartyBalanceStateB.getParticipants().stream()
+                        .map(AbstractParty::getOwningKey)
+                        .collect(Collectors.toList()));
 
-        final Command<BalanceContractPartyB.Commands.UpdateBalance> txCommand = new Command<>(
-                new BalanceContractPartyB.Commands.UpdateBalance(),
-                Arrays.asList(lender.getOwningKey(), borrower.getOwningKey()));
+                         progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
+        
+        // Step 3: Collect signatures from other participants
 
-        final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(new PartyBalanceStateB(amount, lender),BalanceContractPartyB.BalanceContractPartyBID)
-                .addInputState(responseB).addCommand(txCommand);
-               // .addCommand(new BalanceContractPartyB.Commands.UpdateBalance(), lender
-        //.getOwningKey());
-        System.out.println("Inside settlementInitiatorB :: before GENERATING_TRANSACTION");
-        progressTracker.setCurrentStep(GENERATING_TRANSACTION);
-        //transactionBuilder.verify(getServiceHub());
-        System.out.println("Inside settlementInitiatorB :: after verifying _TRANSACTION");
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
-        final SignedTransaction partSignedTx = getServiceHub().signInitialTransaction(transactionBuilder);
-        System.out.println("Inside settlementInitiatorB :: signedTransaction"+partSignedTx.getTx().getOutputs().get(0).getData().getParticipants().toString());
-
-       // progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
-
-        System.out.println("Setlling nostroflow");
-      //  subFlow(new SettleNostroFlow(tranAmt,lender
-        // ));
-        //subFlow(new FinalityFlow(partSignedTx, Collections.emptyList()));
-
-        FlowSession borrowerSession = initiateFlow(borrower);
-        final SignedTransaction fullySignedTx = subFlow(
-                new CollectSignaturesFlow(partSignedTx, ImmutableSet.of(borrowerSession), CollectSignaturesFlow.Companion.tracker()));
-        System.out.println("Inside settlementInitiatorB :: fullySignedTx"+fullySignedTx.getTx().getOutputs().get(0).getData().getParticipants().toString());
-        // Stage 5.
+        List<FlowSession> sessions = newPartyBalanceStateB.getParticipants().stream()
+                .filter(party -> !party.equals(getOurIdentity()))
+                .map(this::initiateFlow)
+                .collect(Collectors.toList());
+        SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
+        
+        // Step 4: Finalize the transaction
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
-        System.out.println("Notarise and record the transaction in both parties' vaults.");
-         subFlow(new FinalityFlow(fullySignedTx, ImmutableSet.of(borrowerSession)));
 
+        System.out.println("Inside settlementInitiatorB :: finalamout"+amount);
+        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        return null;
+return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
     }
 
 

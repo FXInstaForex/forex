@@ -15,9 +15,11 @@ public class PartyBNostroState implements ContractState {
     private final double  amount;
 
     private final Party issuer;
-    public PartyBNostroState(double amount, Party issuer) {
+    private final String status;
+    public PartyBNostroState(double amount, Party issuer, String status) {
         this.amount = amount;
         this.issuer = issuer;
+        this.status = status;
     }
 
     public double getAmount() {

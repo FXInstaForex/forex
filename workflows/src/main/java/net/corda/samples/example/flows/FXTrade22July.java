@@ -129,16 +129,16 @@ public class FXTrade22July extends FlowLogic<Void> {
             String strDate = format.format(new Date());
             if (date.equalsIgnoreCase(strDate)) {
                 System.out.println("==========Trade date is equal to current Date =============================");
-                System.out.println("==========settling party a starts =============================");
-                updateNostroLedgerforPartyA(amount,getOurIdentity());
-                updateLedgerforPartyA(amount,getOurIdentity());
-                //updateA(amount,getOurIdentity());
-                System.out.println("==========settling party a ends =============================");
-                System.out.println("==========settling party b start =============================");
-               subFlow(new SettleFlow(amount,otherParty,getOurIdentity())) ;
-                System.out.println("==========settling party b end =============================");
-               // subFlow(new SettleNostroFlow(amount,otherParty));
-                System.out.println("==========settling party b SettleFlow  ends =============================");
+//                System.out.println("==========settling party a starts =============================");
+//               // updateNostroLedgerforPartyA(amount,getOurIdentity());
+//               // updateLedgerforPartyA(amount,getOurIdentity());
+//                //updateA(amount,getOurIdentity());
+//                System.out.println("==========settling party a ends =============================");
+//                System.out.println("==========settling party b start =============================");
+              // SignedTransaction tx=subFlow(new SettleFlow(amount,otherParty,getOurIdentity(), status)) ;
+              //  System.out.println("==========settling party b end ============================="+tx);
+              //  subFlow(new SettleNostroFlow(amount,otherParty,getOurIdentity()));
+              //  System.out.println("==========settling party b SettleFlow  ends =============================");
             } else {
                 //netting flow
                 System.out.println("Netting to be done when settlement date is same as current date ");
@@ -288,7 +288,7 @@ System.out.println("`````````````````"+iouState.getCountry().getName().toString(
         final PartyABalanceState oldIOUState = iouStateAndRef.getState().getData();
         finalamout = (oldIOUState.getAmount()) - (amount*82);
     System.out.println("Inside updateLedgerforPartyA :: amount"+amount);
-        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party);
+        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, "CONSUMED");
     System.out.println("Inside updateLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
     System.out.println("Inside updateLedgerforPartyA :: finalamout"+finalamout);;
     System.out.println("Inside updateLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
@@ -335,7 +335,7 @@ System.out.println("`````````````````"+iouState.getCountry().getName().toString(
         System.out.println("Inside updateNostroLedgerforPartyA :: amount"+amount);
         System.out.println("Inside updateNostroLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
         System.out.println("Inside updateNostroLedgerforPartyA :: finalamout"+finalamout);
-        final PartyANostroState newIOUState = new PartyANostroState(finalamout, party);
+        final PartyANostroState newIOUState = new PartyANostroState(finalamout, party, "CONSUMED");
 
         System.out.println("Inside updateNostroLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
 

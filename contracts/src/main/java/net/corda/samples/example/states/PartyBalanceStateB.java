@@ -14,10 +14,18 @@ public class PartyBalanceStateB implements ContractState {
     private final double  amount;
     private final Party owner;
 
-    public PartyBalanceStateB(double amount, Party owner) {
+    public String getStatus() {
+        return status;
+    }
+
+    private final String status;
+
+    public PartyBalanceStateB(double amount, Party owner, String status) {
         this.amount = amount;
         this.owner = owner;
+        this.status = status;
     }
+
 
     public double getAmount() {
         return amount;

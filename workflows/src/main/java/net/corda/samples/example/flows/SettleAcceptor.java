@@ -19,30 +19,20 @@ public  class SettleAcceptor extends FlowLogic<SignedTransaction> {
     @Override
     public SignedTransaction call() throws FlowException {
 
-        class SignTxFlow extends SignTransactionFlow {
-            private SignTxFlow(FlowSession otherPartyFlow, ProgressTracker progressTracker) throws FlowException {
-                super(otherPartyFlow, progressTracker);
+            class SignTxFlow extends SignTransactionFlow {
+                private SignTxFlow(FlowSession otherPartySession) {
+                    super(otherPartySession);
+                }
+
+                @Override
+                protected void checkTransaction(SignedTransaction stx) {
+                    // Additional checks on the received transaction
+                }
             }
 
-            @Override
-            protected void checkTransaction(SignedTransaction stx) {
-//                requireThat(require -> {
-//                    ContractState output = stx.getTx().getOutputs().get(0).getData();
-//                    require.using("This must be an IOU transaction.", output instanceof IOUState);
-//                    IOUState iou = (IOUState) output;
-//                    require.using("I won't accept IOUs with a value over 100.", iou.getValue() <= 100);
-//                    return null;
-//                });
-//            }
-            }
-
-            final SignTxFlow signTxFlow = new SignTxFlow(otherPartySession, SignTransactionFlow.Companion.tracker());
+            subFlow(new SignTxFlow(otherPartySession));
 
 
-
-
-
-        }
         return  subFlow(new ReceiveFinalityFlow(otherPartySession));
     }
 }

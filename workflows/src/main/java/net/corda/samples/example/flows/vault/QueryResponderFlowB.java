@@ -29,6 +29,7 @@ import java.util.List;
             System.out.println("QI am inside PartyBalanceStateB responder function ----------");
             QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
             // Perform the vault query on this node
+
             List<StateAndRef<PartyBalanceStateB>> queryResults = getServiceHub().getVaultService().queryBy(PartyBalanceStateB.class, queryCriteria).getStates();
 
 

@@ -14,7 +14,7 @@ import java.util.List;
 
 ;
 
-@InitiatedBy(QueryFlowA.class)
+@InitiatedBy(QueryFlowListA.class)
 public class QueryResponderFlowA extends FlowLogic<List<StateAndRef<PartyABalanceState>>> {
 
 

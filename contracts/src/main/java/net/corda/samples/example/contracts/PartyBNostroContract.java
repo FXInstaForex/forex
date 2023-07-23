@@ -6,7 +6,7 @@ import net.corda.core.transactions.LedgerTransaction;
 import org.jetbrains.annotations.NotNull;
 
 public class PartyBNostroContract implements Contract {
-
+    public static final String PartyBNostroContractID = "net.corda.samples.example.contracts.PartyBNostroContract";
     @Override
     public void verify(@NotNull LedgerTransaction tx)  {
 //        final CommandData command = tx.getCommands().get(0).getValue();

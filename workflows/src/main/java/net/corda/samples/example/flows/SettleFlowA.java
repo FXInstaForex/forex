@@ -3,32 +3,32 @@ package net.corda.samples.example.flows;
 import co.paralleluniverse.fibers.Suspendable;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
+import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
-import net.corda.samples.example.contracts.BalanceContractPartyB;
-import net.corda.samples.example.flows.vault.QueryFlowA;
-import net.corda.samples.example.flows.vault.QueryFlowB;
-import net.corda.samples.example.states.PartyABalanceState;
+
+import net.corda.samples.example.contracts.BalanceContractPartyA;
+import net.corda.samples.example.flows.vault.QueryFlowListA;
 import net.corda.samples.example.states.PartyABalanceState;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @InitiatingFlow
 @StartableByRPC
-public class SettleFlowA extends FlowLogic<Void> {
-    private final double tranAmt ;
+public class SettleFlowA extends FlowLogic<SignedTransaction> {
+
     private final Party issuer;
 
 
 
 
 
-    public SettleFlowA(double tranAmt, Party issuer) {
-        this.tranAmt = tranAmt;
+    public SettleFlowA( Party issuer) {
+
         this.issuer = issuer;
 
 
@@ -48,9 +48,12 @@ public class SettleFlowA extends FlowLogic<Void> {
 
     @Override
     @Suspendable
-    public Void call() throws FlowException {
+    public SignedTransaction call() throws FlowException {
         double Valutamountresult=0;
-        List<StateAndRef<PartyABalanceState>> responseAList= subFlow(new QueryFlowA(issuer));
+
+        List<StateAndRef<PartyABalanceState>> responseAList= subFlow(new QueryFlowListA(issuer));
+        TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0));
+
 
         try {
             for (StateAndRef<PartyABalanceState> output : responseAList) {
@@ -58,40 +61,41 @@ public class SettleFlowA extends FlowLogic<Void> {
                 PartyABalanceState pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
                 System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
+             //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
+                builder  .addInputState(output)
+                        .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyABalanceState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+                                .map(AbstractParty::getOwningKey)
+                                .collect(Collectors.toList()));
 
             }
-            System.out.println("final Valutamountresult"+Valutamountresult);
+
+           builder.addOutputState(new PartyABalanceState(Valutamountresult,issuer,"CONSUMED"), BalanceContractPartyA.BalanceContractPartyAID);
         } catch (Throwable ex) {
             // Handle any exceptions or errors
             ex.printStackTrace();
             // You can also log the error or display a more meaningful error message to the users.
         }
 
-        final PartyABalanceState newIOUState = new PartyABalanceState(Valutamountresult,issuer);
-       final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(newIOUState)
-                //.addInputState(responseB)
-                .addCommand(new BalanceContractPartyB.Commands.UpdateBalance(), issuer.getOwningKey());
-        System.out.println("Inside settleflowA :: before GENERATING_TRANSACTION");
-        progressTracker.setCurrentStep(GENERATING_TRANSACTION);
-        transactionBuilder.verify(getServiceHub());
-        System.out.println("Inside settleflowA :: after verifying _TRANSACTION");
+
         progressTracker.setCurrentStep(SIGNING_TRANSACTION);
-        final SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(transactionBuilder);
-        System.out.println("Inside settleflowA :: signedTransaction"+signedTransaction);
+        SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
 
+        // Step 3: Collect signatures from other participants
+
+        List<FlowSession> sessions = new PartyABalanceState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+                .filter(party -> !party.equals(getOurIdentity()))
+                .map(this::initiateFlow)
+                .collect(Collectors.toList());
+        SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
+
+        // Step 4: Finalize the transaction
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
-        subFlow(new FinalityFlow(signedTransaction, Collections.emptyList()));
 
-        // Optionally, you can also store the state in your own vault
-       //getServiceHub().getVaultService().trackBy(PartyABalanceState.class).getUpdates().subscribe();//update ->
-//               {
-//                    final PartyABalanceState balanceState = update.getProduced().get(0).getState().getData();
-//                    // Do something with the updated balance state
-//                }
-//        );
+        System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
+        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        return null;
+        return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
+
     }
 
 

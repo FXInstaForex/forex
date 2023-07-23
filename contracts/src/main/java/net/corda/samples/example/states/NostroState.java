@@ -14,11 +14,14 @@ import java.util.List;
 public class NostroState implements ContractState {
     private final double  amount;
     private final Party owner;
+    private final  String status;
 
-    public NostroState(double amount, Party owner) {
+    public NostroState(double amount, Party owner, String status) {
         this.amount = amount;
         this.owner = owner;
+        this.status = status;
     }
+
 
     public double getAmount() {
         return amount;
