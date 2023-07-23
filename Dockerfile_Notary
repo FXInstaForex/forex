@@ -7,9 +7,9 @@
 FROM eclipse-temurin:8-jdk-jammy
 #RUN mkdir -p /etc/app
 WORKDIR /etc
-RUN mkdir -p ./app/VMconnection
-COPY /VMconnection /etc/app/VMconnection/
-RUN chmod +x /etc/app/VMconnection/scripts/runNotary.bash
+RUN mkdir -p ./app/forex-v1
+COPY . /etc/app/forex-v1/
+RUN chmod +x /etc/app/forex-v1/VMconnection/scripts/runNotary.bash
 
 #FROM eclipse-temurin:8-jdk-jammy
 #ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/Notary/corda.jar"]
