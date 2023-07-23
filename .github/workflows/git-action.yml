@@ -91,4 +91,4 @@ jobs:
           docker run --name fxinsta_partyc -d wfsettlement/fxinsta-sample:PartyC
           docker pull wfsettlement/fxinsta-sample:Notary
           docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary
-          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
+#          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
