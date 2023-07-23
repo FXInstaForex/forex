@@ -6,8 +6,9 @@ import net.corda.core.transactions.LedgerTransaction;
 import org.jetbrains.annotations.NotNull;
 
 public class PartyBNostroContract implements Contract {
+
     @Override
-    public void verify(@NotNull LedgerTransaction tx) throws IllegalArgumentException {
+    public void verify(@NotNull LedgerTransaction tx)  {
 //        final CommandData command = tx.getCommands().get(0).getValue();
 //
 //        if (command instanceof Commands.UpdateBalance) {

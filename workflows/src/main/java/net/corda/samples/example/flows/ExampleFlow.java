@@ -1,6 +1,9 @@
 package net.corda.samples.example.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.corda.core.contracts.ContractState;
+import net.corda.core.contracts.TransactionState;
+import net.corda.core.identity.AbstractParty;
 import net.corda.samples.example.contracts.IOUContract;
 import net.corda.samples.example.states.IOUState;
 import net.corda.core.contracts.Command;
@@ -13,6 +16,7 @@ import net.corda.core.utilities.ProgressTracker;
 import net.corda.core.utilities.ProgressTracker.Step;
 
 import java.util.Arrays;
+import java.util.List;
 
 import net.corda.core.identity.CordaX500Name;
 
@@ -115,9 +119,12 @@ public class ExampleFlow {
             final SignedTransaction fullySignedTx = subFlow(
                     new CollectSignaturesFlow(partSignedTx, Arrays.asList(otherPartySession), CollectSignaturesFlow.Companion.tracker()));
             System.out.println(",,,,,,,,,,,,,,,,,,,,,,,,,," + fullySignedTx);
-            subFlow(new FXTrade19July(fullySignedTx));
+            System.out.println(",,,,,,PARTY A Settlement starts,,,,,,,,,,,,,,,,,,,," );
+            subFlow(new FXTrade22July(fullySignedTx));
+            System.out.println(",,,,,,PARTY A Settlement ends,,,,,,,,,,,,,,,,,,,," );
             // Stage 5.
             progressTracker.setCurrentStep(FINALISING_TRANSACTION);
+
             return subFlow(new FinalityFlow(fullySignedTx, Arrays.asList(otherPartySession)));
         }
 
