@@ -14,4 +14,4 @@ RUN chmod +x /etc/app/forex-v1/VMconnection/scripts/runPartyA.bash
 #FROM eclipse-temurin:8-jdk-jammy
 #ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyA/corda.jar"]
 CMD ["/bin/bash","-c","/etc/app/forex-v1/VMconnection/scripts/runPartyA.bash"]
-CMD ["/bin/bash","-c","/etc/app/forex-v1/gradlew clean runPartyServer"]
+CMD ["/bin/bash","-c","cd /etc/app/forex-v1;./gradlew clean runPartyServer"]
