@@ -270,7 +270,7 @@ public class FXTrade19July extends FlowLogic<Void> {
         final StateAndRef<PartyBalanceStateA> iouStateAndRef = getServiceHub().getVaultService()
                 .queryBy(PartyBalanceStateA.class, queryCriteria)
                 .getStates().get(0);
-sendAndReceive()
+
         final PartyBalanceStateA oldIOUState = iouStateAndRef.getState().getData();
         final PartyBalanceStateA newIOUState = new PartyBalanceStateA(amount, party);
        
