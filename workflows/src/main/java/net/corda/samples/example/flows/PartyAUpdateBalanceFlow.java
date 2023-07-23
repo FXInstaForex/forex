@@ -7,7 +7,7 @@ import net.corda.core.identity.Party;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
-import net.corda.samples.example.states.PartyBalanceStateA;
+import net.corda.samples.example.states.PartyABalanceState;
 
 import static java.util.Collections.emptyList;
 
@@ -17,9 +17,10 @@ public class PartyAUpdateBalanceFlow extends FlowLogic<Void> {
     private final double amount ;
     private final Party issuer;
 
-    public PartyAUpdateBalanceFlow( double amount, Party issuer) {
+    public PartyAUpdateBalanceFlow(double amount, Party issuer) {
         this.amount = amount;
         this.issuer = issuer;
+
     }
 
     private static final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction");
@@ -38,7 +39,7 @@ public class PartyAUpdateBalanceFlow extends FlowLogic<Void> {
     @Suspendable
     public Void call() throws FlowException {
         final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(new PartyBalanceStateA(amount, issuer))
+                .addOutputState(new PartyABalanceState(amount,  issuer))
                 .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), issuer.getOwningKey());
 
         progressTracker.setCurrentStep(GENERATING_TRANSACTION);

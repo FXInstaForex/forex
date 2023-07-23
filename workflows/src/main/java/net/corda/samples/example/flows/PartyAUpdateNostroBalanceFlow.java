@@ -7,7 +7,6 @@ import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.samples.example.contracts.PartyANostroContract;
 import net.corda.samples.example.states.PartyANostroState;
-import net.corda.samples.example.states.PartyBalanceStateA;
 
 import static java.util.Collections.emptyList;
 
@@ -15,15 +14,17 @@ import static java.util.Collections.emptyList;
 @StartableByRPC
 public class PartyAUpdateNostroBalanceFlow extends FlowLogic<Void> {
     private final double amount ;
-    public PartyAUpdateNostroBalanceFlow(double amount) {
+    private final Party issuer;
+    public PartyAUpdateNostroBalanceFlow(double amount, Party issuer) {
         this.amount = amount;
+        this.issuer = issuer;
     }
 
     @Override
     @Suspendable
     public Void call() throws FlowException {
         final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(new PartyANostroState(amount))
+                .addOutputState(new PartyANostroState(amount, issuer))
                 .addCommand(new PartyANostroContract.Commands.UpdateBalance(), getOurIdentity().getOwningKey());
 transactionBuilder.verify(getServiceHub());
 
