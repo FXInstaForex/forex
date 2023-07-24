@@ -60,8 +60,6 @@ public class SettleFlowNostroA extends FlowLogic<SignedTransaction> {
 
                 PartyANostroState pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
-                System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
-             //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
                 builder  .addInputState(output)
                         .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyANostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
                                 .map(AbstractParty::getOwningKey)
@@ -91,7 +89,7 @@ public class SettleFlowNostroA extends FlowLogic<SignedTransaction> {
         // Step 4: Finalize the transaction
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
+        System.out.println("Final Balance after netting for Party A Nostro "+Valutamountresult);
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));

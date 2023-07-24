@@ -5,13 +5,18 @@ import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
+import net.corda.core.node.services.Vault;
+import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 import net.corda.samples.example.contracts.BalanceContractPartyA;
+import net.corda.samples.example.contracts.NostroContract;
 import net.corda.samples.example.contracts.PartyBNostroContract;
 import net.corda.samples.example.flows.vault.QueryFlowListB;
-import net.corda.samples.example.states.PartyBNostroState;
+import net.corda.samples.example.states.NostroState;
+import net.corda.samples.example.states.NostroState;
+import net.corda.samples.example.states.NostroState;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,25 +56,25 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
     public SignedTransaction call() throws FlowException {
         double Valutamountresult=0;
 
-        List<StateAndRef<PartyBNostroState>> responseAList= subFlow(new QueryFlowListNostroB(issuer));
+       // List<StateAndRef<NostroState>> responseAList= subFlow(new QueryFlowListNostroB(issuer));
         TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0));
-
+        List<StateAndRef<NostroState>> responseAList= getAmountfromVaultforPartyBNostro();
 
         try {
-            for (StateAndRef<PartyBNostroState> output : responseAList) {
+            for (StateAndRef<NostroState> output : responseAList) {
 
-                PartyBNostroState pstate = output.getState().getData();
+                NostroState pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
                 System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
              //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
                 builder  .addInputState(output)
-                        .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyBNostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+                        .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new NostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
                                 .map(AbstractParty::getOwningKey)
                                 .collect(Collectors.toList()));
 
             }
 
-           builder.addOutputState(new PartyBNostroState(Valutamountresult,issuer,"CONSUMED"), PartyBNostroContract.PartyBNostroContractID);
+           builder.addOutputState(new NostroState(Valutamountresult,issuer,"CONSUMED"), NostroContract.NostroContractID);
         } catch (Throwable ex) {
             // Handle any exceptions or errors
             ex.printStackTrace();
@@ -82,7 +87,7 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
 
         // Step 3: Collect signatures from other participants
 
-        List<FlowSession> sessions = new PartyBNostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+        List<FlowSession> sessions = new NostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
                 .filter(party -> !party.equals(getOurIdentity()))
                 .map(this::initiateFlow)
                 .collect(Collectors.toList());
@@ -98,6 +103,25 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
 
     }
 
+    public List<StateAndRef<NostroState>> getAmountfromVaultforPartyBNostro() {
+        double balanceAmt = 0;
+        System.out.println("------getAmountfromVaultforPartyBNostro--------");
 
+
+        QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
+
+        //owner will be party initiating tansaction owner  is
+        Vault.Page<NostroState> results = getServiceHub().getVaultService().queryBy(NostroState.class,queryCriteria);
+        System.out.println("------getAmountfromVaultforPartyBNostro--------"+results.toString());
+        List<StateAndRef<NostroState>> states = results.getStates();
+        for (StateAndRef<NostroState> state : states) {
+            NostroState iouState = state.getState().getData();
+            System.out.println("Balance Amount---NostroState" + iouState.getAmount());
+            balanceAmt = balanceAmt+iouState.getAmount();
+        }
+
+        return states;
+
+    }
 }
 

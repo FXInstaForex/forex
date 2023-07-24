@@ -22,6 +22,7 @@ import net.corda.samples.example.states.*;
 
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -75,16 +76,16 @@ public class FXTrade22July extends FlowLogic<Void> {
         flag = validateNodesAuthenticity(participants);
         System.out.println("flag after validateNodesAuthenticity called" + flag);
 
-        //if (flag) {
+        if (flag) {
         //sign transaction
         signTransaction(otherParty, amount, date);
         updateBalances(amount,date,otherParty);
 
 
 
-        // } else {
-        //  throw new FlowException("Node authenticity failed..transaction failed");
-        //}
+         } else {
+          throw new FlowException("Node authenticity failed..transaction failed");
+        }
 
 
 
@@ -251,11 +252,14 @@ public class FXTrade22July extends FlowLogic<Void> {
         String[] tokens = (nodeX500Name.toString()).split(",");
         String[] conutrytoken = tokens[2].split("=");
         List<StateAndRef<KYCState>> states= getBlacklistedCountries();
-        System.out.println("countries"+states.toString());
+        List<String> blacklisted= new ArrayList<>();
+        blacklisted.add("IR");
+        blacklisted.add("SA");
+        System.out.println("countries"+blacklisted.toString());
         for (StateAndRef<KYCState> state : states) {
             KYCState iouState = state.getState().getData();
 System.out.println("`````````````````"+iouState.getCountry().getName().toString());
-            if((iouState.getCountry().getName().toString()).equalsIgnoreCase(conutrytoken[1])){
+            if(blacklisted.contains(conutrytoken[1])){
                 System.out.println("ngCountry is blacklisted for trade hence rejecti for Trade" + conutrytoken[1] );
                 throw new FlowException("BlackListed country" + conutrytoken[1]);
             }
@@ -288,7 +292,7 @@ System.out.println("`````````````````"+iouState.getCountry().getName().toString(
         final PartyABalanceState oldIOUState = iouStateAndRef.getState().getData();
         finalamout = (oldIOUState.getAmount()) - (amount*82);
     System.out.println("Inside updateLedgerforPartyA :: amount"+amount);
-        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, "CONSUMED");
+        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, Vault.StateStatus.CONSUMED);
     System.out.println("Inside updateLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
     System.out.println("Inside updateLedgerforPartyA :: finalamout"+finalamout);;
     System.out.println("Inside updateLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());

@@ -5,6 +5,7 @@ import net.corda.core.contracts.StateAndRef;
 import net.corda.core.flows.*;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.Party;
+import net.corda.core.node.services.Vault;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
@@ -60,16 +61,15 @@ public class SettleFlowA extends FlowLogic<SignedTransaction> {
 
                 PartyABalanceState pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
-                System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
-             //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
+                 //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
                 builder  .addInputState(output)
-                        .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyABalanceState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+                        .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyABalanceState(Valutamountresult,issuer, Vault.StateStatus.CONSUMED).getParticipants().stream()
                                 .map(AbstractParty::getOwningKey)
                                 .collect(Collectors.toList()));
 
             }
 
-           builder.addOutputState(new PartyABalanceState(Valutamountresult,issuer,"CONSUMED"), BalanceContractPartyA.BalanceContractPartyAID);
+           builder.addOutputState(new PartyABalanceState(Valutamountresult,issuer, Vault.StateStatus.CONSUMED), BalanceContractPartyA.BalanceContractPartyAID);
         } catch (Throwable ex) {
             // Handle any exceptions or errors
             ex.printStackTrace();
@@ -82,7 +82,7 @@ public class SettleFlowA extends FlowLogic<SignedTransaction> {
 
         // Step 3: Collect signatures from other participants
 
-        List<FlowSession> sessions = new PartyABalanceState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
+        List<FlowSession> sessions = new PartyABalanceState(Valutamountresult,issuer, Vault.StateStatus.CONSUMED).getParticipants().stream()
                 .filter(party -> !party.equals(getOurIdentity()))
                 .map(this::initiateFlow)
                 .collect(Collectors.toList());
@@ -91,7 +91,7 @@ public class SettleFlowA extends FlowLogic<SignedTransaction> {
         // Step 4: Finalize the transaction
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
+        System.out.println("Final Balance after netting for Party A"+Valutamountresult);
         progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));

@@ -1,6 +1,7 @@
 package net.corda.samples.example.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.corda.core.node.services.Vault;
 import net.corda.samples.example.contracts.BalanceContractPartyA;
 import net.corda.core.flows.*;
 import net.corda.core.identity.Party;
@@ -41,7 +42,7 @@ public class PartyAUpdateBalanceFlow extends FlowLogic<Void> {
     @Suspendable
     public Void call() throws FlowException {
         final TransactionBuilder transactionBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-                .addOutputState(new PartyABalanceState(amount,  issuer, status))
+                .addOutputState(new PartyABalanceState(amount,  issuer, Vault.StateStatus.UNCONSUMED))
                 .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), issuer.getOwningKey());
 
         progressTracker.setCurrentStep(GENERATING_TRANSACTION);

@@ -56,13 +56,13 @@ private final Party borrower;
     @Suspendable
     public Void call() throws FlowException {
 
-        System.out.println("Updating balances for Party A starts");
+        System.out.println("Settling Balances for Party A starts");
         updateLedgerforPartyA(sellAmount,borrower);
-        System.out.println("Updating balances for Party A ends");
+        System.out.println("Settling Balances for Party A ends");
         System.out.println("----------------------------------------------");
-        System.out.println("Updating balances for nostro A starts");
+        System.out.println("Settling Balances for Party A Nostro  starts");
         updateNostroLedgerforPartyA(buyAmount,borrower);
-        System.out.println("Updating balances for nostro A ends");
+        System.out.println("Settling Balances for Party A Nostro ends");
         return null;
     }
 
@@ -80,14 +80,11 @@ private final Party borrower;
         final StateAndRef<PartyABalanceState> iouStateAndRef = getServiceHub().getVaultService()
                 .queryBy(PartyABalanceState.class, queryCriteria)
                 .getStates().get(0);
-        System.out.println("Inside updateLedgerforPartyA");
         final PartyABalanceState oldIOUState = iouStateAndRef.getState().getData();
         finalamout = (oldIOUState.getAmount()) - (amount*82);
-        System.out.println("Inside updateLedgerforPartyA :: amount"+amount);
-        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, "CONSUMED");
-        System.out.println("Inside updateLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
-        System.out.println("Inside updateLedgerforPartyA :: finalamout"+finalamout);;
-        System.out.println("Inside updateLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
+        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, Vault.StateStatus.CONSUMED);
+        System.out.println("Amount before settelment for Party A  ::"+oldIOUState.getAmount());
+        System.out.println("Amount after final settelment for Party A ::"+finalamout);
 
 
         //progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
@@ -118,8 +115,6 @@ private final Party borrower;
 // STOPSHIP: 22-07-2023
     public void updateNostroLedgerforPartyA(double amount, Party party) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
         double finalamout=0;
-        System.out.println("Inside updateNostroLedgerforPartyA");
-
         QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
 
         final StateAndRef<PartyANostroState> iouStateAndRef = getServiceHub().getVaultService()
@@ -128,26 +123,20 @@ private final Party borrower;
 
         final PartyANostroState oldIOUState = iouStateAndRef.getState().getData();
         finalamout = (oldIOUState.getAmount()) + (amount);
-        System.out.println("Inside updateNostroLedgerforPartyA :: amount"+amount);
-        System.out.println("Inside updateNostroLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
-        System.out.println("Inside updateNostroLedgerforPartyA :: finalamout"+finalamout);
+        System.out.println("Amount before settelment for Party A Nostro  ::"+oldIOUState.getAmount());
+        System.out.println("Amount after final settelment for Party A Nostro::"+finalamout);
         final PartyANostroState newIOUState = new PartyANostroState(finalamout, party, "CONSUMED");
-
-        System.out.println("Inside updateNostroLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
-
-        final TransactionBuilder txnBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
+final TransactionBuilder txnBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
                 .addInputState(iouStateAndRef)
                 .addOutputState(newIOUState)
                 .addCommand(new PartyANostroContract.Commands.UpdateBalance(), party.getOwningKey());
-        System.out.println("before verifying");
+
         txnBuilder.verify(getServiceHub());
-        System.out.println("after verifying");
+
         final SignedTransaction signedTx = getServiceHub().signInitialTransaction(txnBuilder);
         try {
-            System.out.println("1111111111111111111111111111111............try block for nostro A");
-            subFlow(new FinalityFlow(signedTx, emptyList()));
+           subFlow(new FinalityFlow(signedTx, emptyList()));
         } catch (FlowException e) {
-            System.out.println("00000000000000000000111111111111111............catch block for nostro A"+e.getMessage());
             throw new RuntimeException(e);
         }
 

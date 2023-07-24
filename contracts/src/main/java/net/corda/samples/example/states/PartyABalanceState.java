@@ -15,13 +15,14 @@ public class PartyABalanceState implements ContractState {
     private final double  amount;
 
     private final Party owner;
-    private final String status;
+    private final Vault.StateStatus status;
 
-    public PartyABalanceState(double amount, Party owner, String status) {
+    public PartyABalanceState(double amount, Party owner,  Vault.StateStatus status) {
         this.amount = amount;
 
         this.owner = owner;
         this.status = status;
+
     }
 
 
