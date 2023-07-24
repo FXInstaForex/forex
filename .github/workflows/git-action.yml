@@ -39,7 +39,7 @@ jobs:
         tags: PartyA     
         dockerfile: ./Dockerfile_PartyA        
         registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Push Docker Image PartyB
@@ -49,7 +49,7 @@ jobs:
         tags: PartyB
         dockerfile: ./Dockerfile_PartyB        
         registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and Push Docker Image PartyC
@@ -59,7 +59,7 @@ jobs:
         tags: PartyC
         dockerfile: ./Dockerfile_PartyC        
         registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         
     - name: Build and Push Docker Image Notary
@@ -69,10 +69,25 @@ jobs:
         tags: Notary
         dockerfile: ./Dockerfile_Notary
         registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_PASSWORD }}        
 
-    - name: Deploy to Azure VM
+    - name: Deploy to Azure VM1
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZ_VM_IP1 }}
+        username: ${{ secrets.AZ_VM_USERNAME_VM1 }}
+        key: ${{ secrets.VM_SSH_PRIVATE_KEY_VM1 }}
+        port: 22
+        script: |
+          eval "$(ssh-agent)"
+          ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY_VM1 }}"
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull wfsettlement/fxinsta-sample:PartyA
+          docker run --name fxinsta_test_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
+          docker pull wfsettlement/fxinsta-sample:PartyB
+          docker run --name fxinsta_test_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
+    - name: Deploy to Azure VM2
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AZ_VM_IP }}
@@ -82,13 +97,9 @@ jobs:
         script: |
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull wfsettlement/fxinsta-sample:PartyA
-          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
-          docker pull wfsettlement/fxinsta-sample:PartyB
-          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull wfsettlement/fxinsta-sample:PartyC
-          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement/fxinsta-sample:PartyC
+          docker run --name fxinsta_test_partyc -d -p 50011:50011 wfsettlement/fxinsta-sample:PartyC
           docker pull wfsettlement/fxinsta-sample:Notary
-          docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary
+          docker run --name fxinsta_test_notary -d wfsettlement/fxinsta-sample:Notary          
 #          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
