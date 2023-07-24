@@ -118,10 +118,10 @@ public class ExampleFlow {
             FlowSession otherPartySession = initiateFlow(otherParty);
             final SignedTransaction fullySignedTx = subFlow(
                     new CollectSignaturesFlow(partSignedTx, Arrays.asList(otherPartySession), CollectSignaturesFlow.Companion.tracker()));
-            System.out.println(",,,,,,,,,,,,,,,,,,,,,,,,,," + fullySignedTx);
-            System.out.println(",,,,,,PARTY A Settlement starts,,,,,,,,,,,,,,,,,,,," );
-            subFlow(new FXTrade22July(fullySignedTx));
-            System.out.println(",,,,,,PARTY A Settlement ends,,,,,,,,,,,,,,,,,,,," );
+            //System.out.println(",,,,,,,,,,,,,,,,,,,,,,,,,," + fullySignedTx);
+            //System.out.println(",,,,,,PARTY A Settlement starts,,,,,,,,,,,,,,,,,,,," );
+            //subFlow(new FXTrade22July(fullySignedTx));
+           // System.out.println(",,,,,,PARTY A Settlement ends,,,,,,,,,,,,,,,,,,,," );
             // Stage 5.
             progressTracker.setCurrentStep(FINALISING_TRANSACTION);
 

@@ -60,7 +60,7 @@ public class SettleNostroFlow extends FlowLogic<SignedTransaction> {
         final NostroState oldIOUState =  responseB.getState().getData();
 
         double previousAmount = oldIOUState.getAmount();
-        double  amount= previousAmount + (tranAmt*82);
+        double  amount= previousAmount + (tranAmt);
         final NostroState newIOUState = new NostroState(amount,getOurIdentity(),"CONSUMED");
         System.out.println("Amount before settelment for Party B Nostro  ::"+oldIOUState.getAmount());
         System.out.println("Amount after final settelment for Party B Nostro::"+amount);

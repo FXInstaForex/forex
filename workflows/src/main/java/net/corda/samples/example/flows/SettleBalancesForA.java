@@ -81,7 +81,7 @@ private final Party borrower;
                 .queryBy(PartyABalanceState.class, queryCriteria)
                 .getStates().get(0);
         final PartyABalanceState oldIOUState = iouStateAndRef.getState().getData();
-        finalamout = (oldIOUState.getAmount()) - (amount*82);
+        finalamout = (oldIOUState.getAmount()) - (amount);
         final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, Vault.StateStatus.CONSUMED);
         System.out.println("Amount before settelment for Party A  ::"+oldIOUState.getAmount());
         System.out.println("Amount after final settelment for Party A ::"+finalamout);

@@ -2,7 +2,10 @@ package net.corda.samples.example.flows;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.corda.core.contracts.*;
-import net.corda.core.flows.*;
+import net.corda.core.flows.FlowException;
+import net.corda.core.flows.FlowLogic;
+import net.corda.core.flows.InitiatingFlow;
+import net.corda.core.flows.StartableByRPC;
 import net.corda.core.identity.AbstractParty;
 import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
@@ -13,13 +16,12 @@ import net.corda.core.node.services.vault.QueryCriteria;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
-import net.corda.samples.example.contracts.BalanceContractPartyA;
 import net.corda.samples.example.contracts.IOUContract;
-import net.corda.samples.example.contracts.PartyANostroContract;
 import net.corda.samples.example.flows.vault.NostroFlow;
 import net.corda.samples.example.flows.vault.QueryFlowB;
 import net.corda.samples.example.states.*;
 
+import java.math.BigDecimal;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,11 +29,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 @InitiatingFlow
 @StartableByRPC
-public class FXTrade22July extends FlowLogic<Void> {
+public class PostTradeFlow extends FlowLogic<Void> {
 
     private final SignedTransaction signedTransaction;
     private static final ProgressTracker.Step GENERATING_TRANSACTION = new ProgressTracker.Step("Generating transaction");
@@ -46,7 +46,7 @@ public class FXTrade22July extends FlowLogic<Void> {
             FINALIZING_TRANSACTION
     );
 
-    public FXTrade22July(SignedTransaction signedTransaction) {
+    public PostTradeFlow(SignedTransaction signedTransaction) {
         this.signedTransaction = signedTransaction;
     }
 
@@ -55,31 +55,35 @@ public class FXTrade22July extends FlowLogic<Void> {
     public Void call() throws FlowException {
         boolean flag = false;
         Party otherParty = null;
+        Date settlementDate;
         List<TransactionState<ContractState>> outputs = signedTransaction.getTx().getOutputs();
-        int amount = 0;
+        BigDecimal buyAmount = new BigDecimal(0);
+        BigDecimal sellAmount=new BigDecimal(0);
         String date = "";
         // Iterate over the outputs and extract the participants (nodes)
         List<AbstractParty> participants = null;
         for (TransactionState<ContractState> output : outputs) {
             participants = output.getData().getParticipants();
-            IOUState iouState = (IOUState) output.getData();
-            amount = iouState.getValue();
-            date = iouState.getSettlementDate();
+            TradeState tradeState= (TradeState) output.getData().getParticipants();
+            //IOUState iouState = (IOUState) output.getData();
+            buyAmount = tradeState.getBuyAmount();
+            sellAmount=tradeState.getSellAmount();
+settlementDate=tradeState.getSettlmentDate();
 
         }
-        for (AbstractParty node : participants) {
-            if (!(participants.equals(getOurIdentity()))) {
-                otherParty = (Party) node;
-            }
-        }
+//        for (AbstractParty node : participants) {
+//            if (!(participants.equals(getOurIdentity()))) {
+//                otherParty = (Party) node;
+//            }
+//        }
 
         flag = validateNodesAuthenticity(participants);
         System.out.println("Node auntheniticty " + flag);
 
         if (flag) {
         //sign transaction
-        signTransaction(otherParty, amount, date);
-        //updateBalances(amount,date,otherParty);
+        signTransaction(signedTransaction);
+        updateBalances(buyAmount.doubleValue(),sellAmount.doubleValue(),date,otherParty);
 
 
 
@@ -94,7 +98,7 @@ public class FXTrade22July extends FlowLogic<Void> {
         return null;
     }
 @Suspendable
-    public void updateBalances(double amount,String date, Party otherParty) throws FlowException {
+    public void updateBalances(double buyAmount,double sellAmount,String date, Party otherParty) throws FlowException {
 
         double balanceAmtA = getAmountfromVaultforPartyA();
 
@@ -102,27 +106,27 @@ public class FXTrade22July extends FlowLogic<Void> {
     double balanceAmtNostroA = getAmountfromVaultforPartyANostro();
 
 
-    System.out.println("=====================================================");
-    System.out.println("balanceAmtA==============="+balanceAmtA+"================");
+    //System.out.println("=====================================================");
+    //System.out.println("balanceAmtA==============="+balanceAmtA+"================");
 
-    System.out.println("=====================================================");
-    System.out.println("balanceAmtNostroA==============="+balanceAmtNostroA+"================");
+   // System.out.println("=====================================================");
+   // System.out.println("balanceAmtNostroA==============="+balanceAmtNostroA+"================");
     StateAndRef < PartyBalanceStateB > partybBal= subFlow(new QueryFlowB(otherParty));
         double balanceAmtB = partybBal.getState().getData().getAmount();
 
 
 
-    System.out.println("balanceAmtB==============="+balanceAmtB+"================");
+    //System.out.println("balanceAmtB==============="+balanceAmtB+"================");
 
 
     StateAndRef<NostroState> partybBalNostro= subFlow(new NostroFlow(otherParty));
-    System.out.println("partybBalNostro==============="+partybBalNostro+"================");
+    //System.out.println("partybBalNostro==============="+partybBalNostro+"================");
     double balanceAmtNostroB = partybBalNostro.getState().getData().getAmount();
 
-    System.out.println("balanceAmtNostroB==============="+balanceAmtNostroB+"================");
+   // System.out.println("balanceAmtNostroB==============="+balanceAmtNostroB+"================");
 
-    System.out.println("=====================================================");
-        if (balanceAmtB <= amount) {
+   // System.out.println("=====================================================");
+        if (balanceAmtB <= sellAmount) {
             System.out.println("Balance amount is less than the request amount ,Hence declining the transaction");
         } else {
             System.out.println("Balance amount is sufficient  for requested amount to lend ,Hence proceeding the transaction");
@@ -149,16 +153,46 @@ public class FXTrade22July extends FlowLogic<Void> {
         }
     }
 
-    public void signTransaction(Party otherParty, int amount, String settlementDate) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
-        final Party notary = getServiceHub().getNetworkMapCache().getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"));
+    public void signTransaction(SignedTransaction signedTransaction) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
 
-        System.out.println("Other party........" + otherParty);
-        IOUState iouState = new IOUState(amount, getOurIdentity(), otherParty, new UniqueIdentifier(), settlementDate);
-        final Command<IOUContract.Commands.Create> txCommand = new Command<>(
+        List<TransactionState<ContractState>> outputs = signedTransaction.getTx().getOutputs();
+        BigDecimal buyAmount = new BigDecimal(0);
+        BigDecimal sellAmount=new BigDecimal(0);
+        Date settlementDate = null;
+        Party buyer=null;
+        Party seller=null;
+        String buyCurrency = "";
+         String sellCurrency="";
+        String tradeId="";
+        BigDecimal spotRate= new BigDecimal(0);
+UniqueIdentifier linearId=null;
+        // Iterate over the outputs and extract the participants (nodes)
+        List<AbstractParty> participants = null;
+        for (TransactionState<ContractState> output : outputs) {
+            participants = output.getData().getParticipants();
+            TradeState tradeState= (TradeState) output.getData().getParticipants();
+            //IOUState iouState = (IOUState) output.getData();
+            buyAmount = tradeState.getBuyAmount();
+            sellAmount=tradeState.getSellAmount();
+            settlementDate=tradeState.getSettlmentDate();
+buyer=tradeState.getBuyer();
+buyCurrency=tradeState.getBuyCurrency();
+sellCurrency=tradeState.getSellCurrency();
+tradeId=tradeState.getTradeId();
+spotRate=tradeState.getSpotRate();
+linearId=tradeState.getLinearId();
+
+        }
+        final Party notary = getServiceHub().getNetworkMapCache().getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"));
+       // System.out.println("Other party........" + seller);
+         TradeState tradeState= new TradeState(buyer,seller,buyCurrency,buyAmount,sellCurrency,sellAmount,tradeId,settlementDate,spotRate,linearId);
+
+
+            final Command<IOUContract.Commands.Create> txCommand = new Command<>(
                 new IOUContract.Commands.Create(),
-                Arrays.asList(iouState.getLender().getOwningKey(), iouState.getBorrower().getOwningKey()));
+                Arrays.asList(tradeState.getSeller().getOwningKey(), tradeState.getBuyer().getOwningKey()));
         final TransactionBuilder txBuilder = new TransactionBuilder(notary)
-                .addOutputState(iouState, IOUContract.ID)
+                .addOutputState(tradeState, IOUContract.ID)
                 .addCommand(txCommand);
 
         // Stage 2.
@@ -251,14 +285,12 @@ public class FXTrade22July extends FlowLogic<Void> {
         boolean verifiedKYC = false;
         String[] tokens = (nodeX500Name.toString()).split(",");
         String[] conutrytoken = tokens[2].split("=");
-        List<StateAndRef<KYCState>> states= getBlacklistedCountries();
+
         List<String> blacklisted= new ArrayList<>();
         blacklisted.add("IR");
         blacklisted.add("SA");
         //System.out.println("countries"+blacklisted.toString());
-        for (StateAndRef<KYCState> state : states) {
-            KYCState iouState = state.getState().getData();
-//System.out.println("`````````````````"+iouState.getCountry().getName().toString());
+
             if(blacklisted.contains(conutrytoken[1])){
                 System.out.println("Country " + conutrytoken[1]+" is blacklisted for trade hence rejecting for Trade" );
                 throw new FlowException("BlackListed country" + conutrytoken[1]);
@@ -270,107 +302,12 @@ public class FXTrade22July extends FlowLogic<Void> {
 
             }
 
-        }
+
 
 
 
         return verifiedKYC;
     }
-@Suspendable
-    public void updateLedgerforPartyA(double amount, Party party) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
-
-        double finalamout=0;
-
-        System.out.println("Inside updateLedgerforPartyA");
-       // final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
-        QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-
-        final StateAndRef<PartyABalanceState> iouStateAndRef = getServiceHub().getVaultService()
-                .queryBy(PartyABalanceState.class, queryCriteria)
-                .getStates().get(0);
-    System.out.println("Inside updateLedgerforPartyA");
-        final PartyABalanceState oldIOUState = iouStateAndRef.getState().getData();
-        finalamout = (oldIOUState.getAmount()) - (amount*82);
-    System.out.println("Inside updateLedgerforPartyA :: amount"+amount);
-        final PartyABalanceState newIOUState = new PartyABalanceState(finalamout, party, Vault.StateStatus.CONSUMED);
-    System.out.println("Inside updateLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
-    System.out.println("Inside updateLedgerforPartyA :: finalamout"+finalamout);;
-    System.out.println("Inside updateLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
-
-
-        //progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
-
-        /////////////////////////////////////////////////////
-    final TransactionBuilder txnBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-            .addInputState(iouStateAndRef)
-            .addOutputState(newIOUState)
-            .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), party.getOwningKey());
-    progressTracker.setCurrentStep(GENERATING_TRANSACTION);
-   txnBuilder.verify(getServiceHub());
-    progressTracker.setCurrentStep(SIGNING_TRANSACTION);
-    final SignedTransaction signedTx = getServiceHub().signInitialTransaction(txnBuilder);
-    try {
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
-        subFlow(new FinalityFlow(signedTx, emptyList()));
-    } catch (FlowException e) {
-        throw new RuntimeException(e);
-    }
-
-
-
-
-    }
-
-   
-@Suspendable
-// STOPSHIP: 22-07-2023
-    public void updateNostroLedgerforPartyA(double amount, Party party) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
-        double finalamout=0;
-        System.out.println("Inside updateNostroLedgerforPartyA");
-
-        QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-
-        final StateAndRef<PartyANostroState> iouStateAndRef = getServiceHub().getVaultService()
-                .queryBy(PartyANostroState.class, queryCriteria)
-                .getStates().get(0);
-
-        final PartyANostroState oldIOUState = iouStateAndRef.getState().getData();
-        finalamout = (oldIOUState.getAmount()) + (amount);
-        System.out.println("Inside updateNostroLedgerforPartyA :: amount"+amount);
-        System.out.println("Inside updateNostroLedgerforPartyA :: oldIOUState.getAmount())"+oldIOUState.getAmount());
-        System.out.println("Inside updateNostroLedgerforPartyA :: finalamout"+finalamout);
-        final PartyANostroState newIOUState = new PartyANostroState(finalamout, party, "CONSUMED");
-
-        System.out.println("Inside updateNostroLedgerforPartyA :: iouStateAndRef"+iouStateAndRef.toString());
-
-    final TransactionBuilder txnBuilder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
-            .addInputState(iouStateAndRef)
-            .addOutputState(newIOUState)
-            .addCommand(new PartyANostroContract.Commands.UpdateBalance(), party.getOwningKey());
-System.out.println("before verifying");
-    txnBuilder.verify(getServiceHub());
-    System.out.println("after verifying");
-    final SignedTransaction signedTx = getServiceHub().signInitialTransaction(txnBuilder);
-    try {
-System.out.println("1111111111111111111111111111111............try block for nostro A");
-        subFlow(new FinalityFlow(signedTx, emptyList()));
-    } catch (FlowException e) {
-        System.out.println("00000000000000000000111111111111111............catch block for nostro A"+e.getMessage());
-        throw new RuntimeException(e);
-    }
-
-
-    }
-
-    public List<StateAndRef<KYCState>> getBlacklistedCountries() {
-        System.out.println("Inside getBlacklistedCountries");
-        QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
-        Vault.Page<KYCState> results = getServiceHub().getVaultService().queryBy(KYCState.class);
-        List<StateAndRef<KYCState>> states = results.getStates();
-        return states;
-    }
-
-
     public double getAmountfromVaultforPartyA() {
         double balanceAmt = 0;
         System.out.println("------getAmountfromVaultforPartyA--------");
@@ -392,7 +329,7 @@ System.out.println("1111111111111111111111111111111............try block for nos
     }
     public double getAmountfromVaultforPartyANostro() {
         double balanceAmt = 0;
-        System.out.println("------getAmountfromVaultforPartyANostro--------");
+      //  System.out.println("------getAmountfromVaultforPartyANostro--------");
 
 
         QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
@@ -402,7 +339,7 @@ System.out.println("1111111111111111111111111111111............try block for nos
         List<StateAndRef<PartyANostroState>> states = results.getStates();
         for (StateAndRef<PartyANostroState> state : states) {
             PartyANostroState iouState = state.getState().getData();
-            System.out.println("Balance Amount---PartyANostroState" + iouState.getAmount());
+           // System.out.println("Balance Amount---PartyANostroState" + iouState.getAmount());
             balanceAmt = iouState.getAmount();
         }
 
