@@ -28,14 +28,14 @@ public class ProposalFlow {
 
         private Party counterparty;
         private String buyCurrency;
-        private BigDecimal buyAmount;
+        private double buyAmount;
         private String sellCurrency;
-        private BigDecimal sellAmount;
+        private double sellAmount;
         private String tradeId;
         private Date settlmentDate;
-        private BigDecimal spotRate;
+        private double spotRate;
 
-        public Initiator(Boolean isBuyer, Party counterparty, String buyCurrency, BigDecimal buyAmount, String sellCurrency, BigDecimal sellAmount, String tradeId, Date settlmentDate,BigDecimal spotRate) {
+        public Initiator(Boolean isBuyer, Party counterparty, String buyCurrency, double buyAmount, String sellCurrency, double sellAmount, String tradeId, Date settlmentDate,double spotRate) {
             this.isBuyer = isBuyer;
             this.counterparty = counterparty;
             this.buyCurrency=buyCurrency;

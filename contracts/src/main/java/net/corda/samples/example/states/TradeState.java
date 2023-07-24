@@ -9,7 +9,6 @@ import net.corda.core.identity.Party;
 import net.corda.core.serialization.ConstructorForDeserialization;
 import net.corda.samples.example.contracts.ProposalAndTradeContract;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,17 +19,17 @@ public class TradeState implements LinearState {
     private UniqueIdentifier linearId;
 
     private String buyCurrency;
-    private BigDecimal buyAmount;
+    private double buyAmount;
     private String sellCurrency;
-    private BigDecimal sellAmount;
+    private double sellAmount;
     private String tradeId;
     private Date settlmentDate;
 
-    private BigDecimal spotRate;
+    private double spotRate;
 
 
     @ConstructorForDeserialization
-    public TradeState( Party buyer, Party seller,String buyCurrency,BigDecimal buyAmount,String sellCurrency,BigDecimal sellAmount,String tradeId,Date settlmentDate, BigDecimal spotRate,UniqueIdentifier linearId) {
+    public TradeState( Party buyer, Party seller,String buyCurrency,double buyAmount,String sellCurrency,double sellAmount,String tradeId,Date settlmentDate, double spotRate,UniqueIdentifier linearId) {
 
         this.buyer = buyer;
         this.seller = seller;
@@ -44,7 +43,7 @@ public class TradeState implements LinearState {
         this.linearId = linearId;
     }
 
-    public TradeState( Party buyer, Party seller,String buyCurrency,BigDecimal buyAmount,String sellCurrency,BigDecimal sellAmount,String tradeId,Date settlmentDate,BigDecimal spotRate) {
+    public TradeState( Party buyer, Party seller,String buyCurrency,double buyAmount,String sellCurrency,double sellAmount,String tradeId,Date settlmentDate,double spotRate) {
 
         this.buyer = buyer;
         this.seller = seller;
@@ -70,15 +69,16 @@ public class TradeState implements LinearState {
         return linearId;
     }
 
-    public BigDecimal getBuyAmount() {
+
+    public double getBuyAmount() {
         return buyAmount;
     }
 
-    public BigDecimal getSellAmount() {
+    public double getSellAmount() {
         return sellAmount;
     }
 
-    public BigDecimal getSpotRate() {
+    public double getSpotRate() {
         return spotRate;
     }
 

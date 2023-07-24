@@ -39,6 +39,7 @@ public class PostTradeFlow extends FlowLogic<Void> {
     private static final ProgressTracker.Step SIGNING_TRANSACTION = new ProgressTracker.Step("Signing transaction");
     private static final ProgressTracker.Step FINALIZING_TRANSACTION = new ProgressTracker.Step("Finalizing transaction");
 
+
     private final ProgressTracker progressTracker = new ProgressTracker(
             GENERATING_TRANSACTION,
             VERIFYING_TRANSACTION,
@@ -56,9 +57,11 @@ public class PostTradeFlow extends FlowLogic<Void> {
         boolean flag = false;
         Party otherParty = null;
         Date settlementDate;
+        double buyAmount = 0;
+        double sellAmount = 0;
         List<TransactionState<ContractState>> outputs = signedTransaction.getTx().getOutputs();
-        BigDecimal buyAmount = new BigDecimal(0);
-        BigDecimal sellAmount=new BigDecimal(0);
+        /*BigDecimal buyAmount = new BigDecimal(0);
+        BigDecimal sellAmount=new BigDecimal(0);*/
         String date = "";
         // Iterate over the outputs and extract the participants (nodes)
         List<AbstractParty> participants = null;
@@ -67,28 +70,23 @@ public class PostTradeFlow extends FlowLogic<Void> {
             TradeState tradeState= (TradeState) output.getData().getParticipants();
             //IOUState iouState = (IOUState) output.getData();
             buyAmount = tradeState.getBuyAmount();
-            sellAmount=tradeState.getSellAmount();
-settlementDate=tradeState.getSettlmentDate();
+            sellAmount= tradeState.getSellAmount();
+            settlementDate=tradeState.getSettlmentDate();
 
         }
-//        for (AbstractParty node : participants) {
-//            if (!(participants.equals(getOurIdentity()))) {
-//                otherParty = (Party) node;
-//            }
-//        }
 
         flag = validateNodesAuthenticity(participants);
         System.out.println("Node auntheniticty " + flag);
 
         if (flag) {
-        //sign transaction
-        signTransaction(signedTransaction);
-        updateBalances(buyAmount.doubleValue(),sellAmount.doubleValue(),date,otherParty);
+            //sign transaction
+            signTransaction(signedTransaction);
+            updateBalances(buyAmount,sellAmount,date,otherParty);
 
 
 
-         } else {
-          throw new FlowException("Node authenticity failed..transaction failed");
+        } else {
+            throw new FlowException("Node authenticity failed..transaction failed");
         }
 
 
@@ -97,35 +95,33 @@ settlementDate=tradeState.getSettlmentDate();
 
         return null;
     }
-@Suspendable
+    @Suspendable
     public void updateBalances(double buyAmount,double sellAmount,String date, Party otherParty) throws FlowException {
 
         double balanceAmtA = getAmountfromVaultforPartyA();
+        double balanceAmtNostroA = getAmountfromVaultforPartyANostro();
 
 
-    double balanceAmtNostroA = getAmountfromVaultforPartyANostro();
+        //System.out.println("=====================================================");
+        //System.out.println("balanceAmtA==============="+balanceAmtA+"================");
 
-
-    //System.out.println("=====================================================");
-    //System.out.println("balanceAmtA==============="+balanceAmtA+"================");
-
-   // System.out.println("=====================================================");
-   // System.out.println("balanceAmtNostroA==============="+balanceAmtNostroA+"================");
-    StateAndRef < PartyBalanceStateB > partybBal= subFlow(new QueryFlowB(otherParty));
+        // System.out.println("=====================================================");
+        // System.out.println("balanceAmtNostroA==============="+balanceAmtNostroA+"================");
+        StateAndRef < PartyBalanceStateB > partybBal= subFlow(new QueryFlowB(otherParty));
         double balanceAmtB = partybBal.getState().getData().getAmount();
 
 
 
-    //System.out.println("balanceAmtB==============="+balanceAmtB+"================");
+        //System.out.println("balanceAmtB==============="+balanceAmtB+"================");
 
 
-    StateAndRef<NostroState> partybBalNostro= subFlow(new NostroFlow(otherParty));
-    //System.out.println("partybBalNostro==============="+partybBalNostro+"================");
-    double balanceAmtNostroB = partybBalNostro.getState().getData().getAmount();
+        StateAndRef<NostroState> partybBalNostro= subFlow(new NostroFlow(otherParty));
+        //System.out.println("partybBalNostro==============="+partybBalNostro+"================");
+        double balanceAmtNostroB = partybBalNostro.getState().getData().getAmount();
 
-   // System.out.println("balanceAmtNostroB==============="+balanceAmtNostroB+"================");
+        // System.out.println("balanceAmtNostroB==============="+balanceAmtNostroB+"================");
 
-   // System.out.println("=====================================================");
+        // System.out.println("=====================================================");
         if (balanceAmtB <= sellAmount) {
             System.out.println("Balance amount is less than the request amount ,Hence declining the transaction");
         } else {
@@ -140,10 +136,10 @@ settlementDate=tradeState.getSettlmentDate();
 //                //updateA(amount,getOurIdentity());
 //                System.out.println("==========settling party a ends =============================");
 //                System.out.println("==========settling party b start =============================");
-              // SignedTransaction tx=subFlow(new SettleFlow(amount,otherParty,getOurIdentity(), status)) ;
-              //  System.out.println("==========settling party b end ============================="+tx);
-              //  subFlow(new SettleNostroFlow(amount,otherParty,getOurIdentity()));
-              //  System.out.println("==========settling party b SettleFlow  ends =============================");
+                // SignedTransaction tx=subFlow(new SettleFlow(amount,otherParty,getOurIdentity(), status)) ;
+                //  System.out.println("==========settling party b end ============================="+tx);
+                //  subFlow(new SettleNostroFlow(amount,otherParty,getOurIdentity()));
+                //  System.out.println("==========settling party b SettleFlow  ends =============================");
             } else {
                 //netting flow
                 System.out.println("Netting to be done when settlement date is same as current date ");
@@ -156,16 +152,19 @@ settlementDate=tradeState.getSettlmentDate();
     public void signTransaction(SignedTransaction signedTransaction) throws TransactionVerificationException, AttachmentResolutionException, TransactionResolutionException {
 
         List<TransactionState<ContractState>> outputs = signedTransaction.getTx().getOutputs();
-        BigDecimal buyAmount = new BigDecimal(0);
-        BigDecimal sellAmount=new BigDecimal(0);
+        /*BigDecimal buyAmount = new BigDecimal(0);
+        BigDecimal sellAmount=new BigDecimal(0);*/
         Date settlementDate = null;
         Party buyer=null;
         Party seller=null;
         String buyCurrency = "";
-         String sellCurrency="";
+        String sellCurrency="";
         String tradeId="";
-        BigDecimal spotRate= new BigDecimal(0);
-UniqueIdentifier linearId=null;
+        double buyAmount = 0;
+        double sellAmount = 0;
+        double spotRate=0;
+        // BigDecimal spotRate= new BigDecimal(0);
+        UniqueIdentifier linearId=null;
         // Iterate over the outputs and extract the participants (nodes)
         List<AbstractParty> participants = null;
         for (TransactionState<ContractState> output : outputs) {
@@ -175,20 +174,20 @@ UniqueIdentifier linearId=null;
             buyAmount = tradeState.getBuyAmount();
             sellAmount=tradeState.getSellAmount();
             settlementDate=tradeState.getSettlmentDate();
-buyer=tradeState.getBuyer();
-buyCurrency=tradeState.getBuyCurrency();
-sellCurrency=tradeState.getSellCurrency();
-tradeId=tradeState.getTradeId();
-spotRate=tradeState.getSpotRate();
-linearId=tradeState.getLinearId();
+            buyer=tradeState.getBuyer();
+            buyCurrency=tradeState.getBuyCurrency();
+            sellCurrency=tradeState.getSellCurrency();
+            tradeId=tradeState.getTradeId();
+            spotRate=tradeState.getSpotRate();
+            linearId=tradeState.getLinearId();
 
         }
         final Party notary = getServiceHub().getNetworkMapCache().getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"));
-       // System.out.println("Other party........" + seller);
-         TradeState tradeState= new TradeState(buyer,seller,buyCurrency,buyAmount,sellCurrency,sellAmount,tradeId,settlementDate,spotRate,linearId);
+        // System.out.println("Other party........" + seller);
+        TradeState tradeState= new TradeState(buyer,seller,buyCurrency,buyAmount,sellCurrency,sellAmount,tradeId,settlementDate,spotRate,linearId);
 
 
-            final Command<IOUContract.Commands.Create> txCommand = new Command<>(
+        final Command<IOUContract.Commands.Create> txCommand = new Command<>(
                 new IOUContract.Commands.Create(),
                 Arrays.asList(tradeState.getSeller().getOwningKey(), tradeState.getBuyer().getOwningKey()));
         final TransactionBuilder txBuilder = new TransactionBuilder(notary)
@@ -208,7 +207,6 @@ linearId=tradeState.getLinearId();
 
 
 
-
     public boolean validateNodesAuthenticity(List<AbstractParty> nodes) throws FlowException {
         boolean validateNodeFlag = false;
         for (AbstractParty node : nodes) {
@@ -222,7 +220,7 @@ linearId=tradeState.getLinearId();
             }
 
             if(validateNodeFlag){
-               validateNodeFlag= verifyNodeIntegrity(node.nameOrNull(), node.getOwningKey());
+                validateNodeFlag= verifyNodeIntegrity(node.nameOrNull(), node.getOwningKey());
             }
         }
 
@@ -291,16 +289,16 @@ linearId=tradeState.getLinearId();
         blacklisted.add("SA");
         //System.out.println("countries"+blacklisted.toString());
 
-            if(blacklisted.contains(conutrytoken[1])){
-                System.out.println("Country " + conutrytoken[1]+" is blacklisted for trade hence rejecting for Trade" );
-                throw new FlowException("BlackListed country" + conutrytoken[1]);
-            }
-            else {
-                System.out.println("Country "+ conutrytoken[1]+" is valid for trade " );
-                verifiedKYC = true;
+        if(blacklisted.contains(conutrytoken[1])){
+            System.out.println("Country " + conutrytoken[1]+" is blacklisted for trade hence rejecting for Trade" );
+            throw new FlowException("BlackListed country" + conutrytoken[1]);
+        }
+        else {
+            System.out.println("Country "+ conutrytoken[1]+" is valid for trade " );
+            verifiedKYC = true;
 
 
-            }
+        }
 
 
 
@@ -329,7 +327,7 @@ linearId=tradeState.getLinearId();
     }
     public double getAmountfromVaultforPartyANostro() {
         double balanceAmt = 0;
-      //  System.out.println("------getAmountfromVaultforPartyANostro--------");
+        //  System.out.println("------getAmountfromVaultforPartyANostro--------");
 
 
         QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
@@ -339,7 +337,7 @@ linearId=tradeState.getLinearId();
         List<StateAndRef<PartyANostroState>> states = results.getStates();
         for (StateAndRef<PartyANostroState> state : states) {
             PartyANostroState iouState = state.getState().getData();
-           // System.out.println("Balance Amount---PartyANostroState" + iouState.getAmount());
+            // System.out.println("Balance Amount---PartyANostroState" + iouState.getAmount());
             balanceAmt = iouState.getAmount();
         }
 

@@ -2,7 +2,6 @@ package net.corda.samples.example.states;
 
 import com.google.common.collect.ImmutableList;
 import net.corda.core.contracts.BelongsToContract;
-import net.corda.core.contracts.ContractState;
 import net.corda.core.contracts.LinearState;
 import net.corda.core.contracts.UniqueIdentifier;
 import net.corda.core.identity.AbstractParty;
@@ -11,7 +10,6 @@ import net.corda.core.serialization.ConstructorForDeserialization;
 import net.corda.samples.example.contracts.ProposalAndTradeContract;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,15 +21,15 @@ public class ProposalState implements LinearState {
     private Party proposee;
     private UniqueIdentifier linearId;
     private String buyCurrency;
-    private BigDecimal buyAmount;
+    private double buyAmount;
     private String sellCurrency;
-    private BigDecimal sellAmount;
+    private double sellAmount;
     private String tradeId;
     private Date settlmentDate;
-    private BigDecimal spotRate;
+    private double spotRate;
 
     @ConstructorForDeserialization
-    public ProposalState(Party buyer, Party seller, Party proposer, Party proposee, String buyCurrency,BigDecimal buyAmount,String sellCurrency,BigDecimal sellAmount,String tradeId,Date settlmentDate,BigDecimal spotRate,UniqueIdentifier linearId) {
+    public ProposalState(Party buyer, Party seller, Party proposer, Party proposee, String buyCurrency,double buyAmount,String sellCurrency,double sellAmount,String tradeId,Date settlmentDate,double spotRate,UniqueIdentifier linearId) {
 
         this.buyer = buyer;
         this.seller = seller;
@@ -44,13 +42,13 @@ public class ProposalState implements LinearState {
         this.tradeId = tradeId;
         this.settlmentDate=settlmentDate;
         this.spotRate=spotRate;
-        BigDecimal result = spotRate.multiply(buyAmount);
+        double result = spotRate * buyAmount;
         this.sellAmount=result;
         this.linearId = linearId;
 
     }
 
-    public ProposalState(Party buyer, Party seller, Party proposer, Party proposee,String buyCurrency,BigDecimal buyAmount,String sellCurrency,BigDecimal sellAmount,String tradeId,Date settlmentDate, BigDecimal spotRate) {
+    public ProposalState(Party buyer, Party seller, Party proposer, Party proposee,String buyCurrency,double buyAmount,String sellCurrency,double sellAmount,String tradeId,Date settlmentDate, double spotRate) {
 
         this.buyer = buyer;
         this.seller = seller;
@@ -62,7 +60,7 @@ public class ProposalState implements LinearState {
         this.tradeId = tradeId;
         this.settlmentDate=settlmentDate;
         this.spotRate=spotRate;
-        BigDecimal result = spotRate.multiply(buyAmount);
+        double result = spotRate * buyAmount;
         this.sellAmount=result;
         this.linearId = new UniqueIdentifier();
     }
@@ -80,20 +78,16 @@ public class ProposalState implements LinearState {
     }
 
 
-    public BigDecimal getSpotRate() {
-        return spotRate;
-    }
-
-    public BigDecimal getBuyAmount() {
+    public double getBuyAmount() {
         return buyAmount;
     }
 
-    public void setSellAmount(BigDecimal sellAmount) {
-        this.sellAmount = sellAmount;
+    public double getSellAmount() {
+        return sellAmount;
     }
 
-    public BigDecimal getSellAmount() {
-        return sellAmount;
+    public double getSpotRate() {
+        return spotRate;
     }
 
     public String getBuyCurrency() {

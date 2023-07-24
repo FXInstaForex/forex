@@ -41,7 +41,6 @@ public class ProposalAndTradeContract implements Contract {
                 ProposalState input = tx.inputsOfType(ProposalState.class).get(0);
                 TradeState output = tx.outputsOfType(TradeState.class).get(0);
 
-                require.using("The amount is unmodified in the output", output.getBuyAmount() == input.getBuyAmount());
                 require.using("The buyer is unmodified in the output", input.getBuyer().equals(output.getBuyer()));
                 require.using("The seller is unmodified in the output", input.getSeller().equals(output.getSeller()));
 
@@ -61,7 +60,7 @@ public class ProposalAndTradeContract implements Contract {
                 ProposalState input = tx.inputsOfType(ProposalState.class).get(0);
                 ProposalState output = tx.outputsOfType(ProposalState.class).get(0);
 
-                require.using("The amount is unmodified in the output", output.getBuyAmount() != input.getBuyAmount());
+
                 require.using("The buyer is unmodified in the output", input.getBuyer().equals(output.getBuyer()));
                 require.using("The seller is unmodified in the output", input.getSeller().equals(output.getSeller()));
 

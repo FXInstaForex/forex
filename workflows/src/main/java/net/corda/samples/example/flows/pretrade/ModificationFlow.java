@@ -2,8 +2,7 @@ package net.corda.samples.example.flows.pretrade;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ImmutableList;
-import net.corda.samples.example.contracts.ProposalAndTradeContract;
-import net.corda.samples.example.states.ProposalState;
+
 import net.corda.core.contracts.Command;
 import net.corda.core.contracts.StateAndRef;
 import net.corda.core.contracts.UniqueIdentifier;
@@ -16,6 +15,8 @@ import net.corda.core.transactions.LedgerTransaction;
 import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
+import net.corda.samples.example.contracts.ProposalAndTradeContract;
+import net.corda.samples.example.states.ProposalState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Signed;
@@ -30,12 +31,12 @@ public class ModificationFlow {
     @StartableByRPC
     public static class Initiator extends FlowLogic<SignedTransaction>{
         private UniqueIdentifier proposalId;
-        private BigDecimal spotRate;
-        private BigDecimal sellAmount;
-        private BigDecimal buyAmount;
+        private double spotRate;
+        private double sellAmount;
+        private double buyAmount;
         private ProgressTracker progressTracker = new ProgressTracker();
 
-        public Initiator(UniqueIdentifier proposalId, BigDecimal spotRate,BigDecimal buyAmount) {
+        public Initiator(UniqueIdentifier proposalId, double spotRate,double buyAmount) {
             this.proposalId = proposalId;
             this.spotRate = spotRate;
             this.buyAmount= buyAmount;
@@ -45,12 +46,13 @@ public class ModificationFlow {
         @Override
         public SignedTransaction call() throws FlowException {
             QueryCriteria.LinearStateQueryCriteria inputCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(proposalId), Vault.StateStatus.UNCONSUMED, null);
-            StateAndRef inputStateAndRef = getServiceHub().getVaultService().queryBy(ProposalState.class).getStates().get(0);
+            StateAndRef inputStateAndRef = getServiceHub().getVaultService().queryBy(ProposalState.class, inputCriteria).getStates().get(0);
             ProposalState input = (ProposalState) inputStateAndRef.getState().getData();
 
             //Creating the output
             Party counterparty = (getOurIdentity().equals(input.getProposer()))? input.getProposee() : input.getProposer();
-            ProposalState output = new ProposalState(input.getBuyer(),input.getSeller(), getOurIdentity(), counterparty,input.getBuyCurrency(),buyAmount,input.getSellCurrency(),spotRate.multiply(buyAmount),input.getTradeId(),input.getSettlmentDate(),spotRate,input.getLinearId());
+            sellAmount= spotRate* buyAmount;
+            ProposalState output = new ProposalState(input.getBuyer(),input.getSeller(), getOurIdentity(), counterparty,input.getBuyCurrency(),buyAmount,input.getSellCurrency(),sellAmount,input.getTradeId(),input.getSettlmentDate(),spotRate,input.getLinearId());
 
             //Creating the command
             List<PublicKey> requiredSigners = ImmutableList.of(input.getProposee().getOwningKey(), input.getProposer().getOwningKey());

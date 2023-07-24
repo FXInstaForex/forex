@@ -43,12 +43,12 @@ public class AcceptanceFlow {
 
             QueryCriteria.LinearStateQueryCriteria inputCriteria = new QueryCriteria.LinearStateQueryCriteria(null, ImmutableList.of(proposalId), Vault.StateStatus.UNCONSUMED,null);
 
-            StateAndRef inputStateAndRef = getServiceHub().getVaultService().queryBy(ProposalState.class).getStates().get(0);
+            StateAndRef inputStateAndRef = getServiceHub().getVaultService().queryBy(ProposalState.class, inputCriteria).getStates().get(0);
 
             ProposalState input = (ProposalState) inputStateAndRef.getState().getData();
 
             //Creating the output
-            TradeState output = new TradeState(input.getBuyer(), input.getSeller(),input.getBuyCurrency(),input.getBuyAmount(), input.getSellCurrency(),input.getSellAmount(),input.getTradeId(),input.getSettlmentDate(),input.getSpotRate(),input.getLinearId());
+            TradeState output = new TradeState(input.getBuyer(), input.getSeller(),input.getBuyCurrency(),input.getBuyAmount(),input.getSellCurrency(),input.getSellAmount(),input.getTradeId(),input.getSettlmentDate(),input.getSpotRate(),input.getLinearId());
 
             //Creating the command
             List<PublicKey> requiredSigners = ImmutableList.of(input.getProposee().getOwningKey(), input.getProposer().getOwningKey());
@@ -71,8 +71,6 @@ public class AcceptanceFlow {
 
             // Finalising the transaction
             SignedTransaction finalisedTx  = subFlow(new FinalityFlow(fullyStx, ImmutableList.of(counterpartySession)));
-            ///calling post trade
-            //subFlow(new FXTrade22July(finalisedTx));
             return finalisedTx;
         }
     }
