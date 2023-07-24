@@ -1,0 +1,94 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "Forex_Code_v2", "main" ]
+  pull_request:
+    branches: [ "Forex_Code_v2", "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew      
+      run: chmod +x gradlew
+
+    - name: Build and Push Docker Image PartyA
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: PartyA     
+        dockerfile: ./Dockerfile_PartyA        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image PartyB
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: PartyB
+        dockerfile: ./Dockerfile_PartyB        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build and Push Docker Image PartyC
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: PartyC
+        dockerfile: ./Dockerfile_PartyC        
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Build and Push Docker Image Notary
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with:
+        image: wfsettlement/fxinsta-sample
+        tags: Notary
+        dockerfile: ./Dockerfile_Notary
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}        
+
+    - name: Deploy to Azure VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZ_VM_IP }}
+        username: ${{ secrets.AZ_VM_USERNAME }}
+        key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          eval "$(ssh-agent)"
+          ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull wfsettlement/fxinsta-sample:PartyA
+          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
+          docker pull wfsettlement/fxinsta-sample:PartyB
+          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
+          docker pull wfsettlement/fxinsta-sample:PartyC
+          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement/fxinsta-sample:PartyC
+          docker pull wfsettlement/fxinsta-sample:Notary
+          docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary
+#          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
