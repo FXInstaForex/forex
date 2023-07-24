@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "Forex_Code_v2", "main" ]
+    branches: [ "Forex_Code_v2", "main", "testBranch-donotuse" ]
   pull_request:
-    branches: [ "Forex_Code_v2", "main" ]
+    branches: [ "Forex_Code_v2", "main", "testBranch-donotuse" ]
 
 permissions:
   contents: read

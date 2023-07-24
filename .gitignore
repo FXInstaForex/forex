@@ -1,3 +1,4 @@
 *.log
 scripts/
 VMconnection/corda-tools-network-bootstrapper-4.10-RC05.jar
+VMconnection/.cache/
