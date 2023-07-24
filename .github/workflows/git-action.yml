@@ -35,7 +35,7 @@ jobs:
     - name: Build and Push Docker Image PartyA
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/fxinsta-sample
+        image: wfsettlement1/fxinsta-sample
         tags: PartyA     
         dockerfile: ./Dockerfile_PartyA        
         registry: docker.io
@@ -45,7 +45,7 @@ jobs:
     - name: Build and Push Docker Image PartyB
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/fxinsta-sample
+        image: wfsettlement1/fxinsta-sample
         tags: PartyB
         dockerfile: ./Dockerfile_PartyB        
         registry: docker.io
@@ -55,7 +55,7 @@ jobs:
     - name: Build and Push Docker Image PartyC
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/fxinsta-sample
+        image: wfsettlement1/fxinsta-sample
         tags: PartyC
         dockerfile: ./Dockerfile_PartyC        
         registry: docker.io
@@ -65,7 +65,7 @@ jobs:
     - name: Build and Push Docker Image Notary
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/fxinsta-sample
+        image: wfsettlement1/fxinsta-sample
         tags: Notary
         dockerfile: ./Dockerfile_Notary
         registry: docker.io
@@ -83,9 +83,9 @@ jobs:
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY_VM1 }}"
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull wfsettlement/fxinsta-sample:PartyA
+          docker pull wfsettlement1/fxinsta-sample:PartyA
           docker run --name fxinsta_test_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
-          docker pull wfsettlement/fxinsta-sample:PartyB
+          docker pull wfsettlement1/fxinsta-sample:PartyB
           docker run --name fxinsta_test_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
     - name: Deploy to Azure VM2
       uses: appleboy/ssh-action@master
@@ -98,8 +98,8 @@ jobs:
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull wfsettlement/fxinsta-sample:PartyC
+          docker pull wfsettlement1/fxinsta-sample:PartyC
           docker run --name fxinsta_test_partyc -d -p 50011:50011 wfsettlement/fxinsta-sample:PartyC
-          docker pull wfsettlement/fxinsta-sample:Notary
+          docker pull wfsettlement1/fxinsta-sample:Notary
           docker run --name fxinsta_test_notary -d wfsettlement/fxinsta-sample:Notary          
 #          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
