@@ -62,9 +62,8 @@ public class SettleNostroFlow extends FlowLogic<SignedTransaction> {
         double previousAmount = oldIOUState.getAmount();
         double  amount= previousAmount + (tranAmt*82);
         final NostroState newIOUState = new NostroState(amount,getOurIdentity(),"CONSUMED");
-        System.out.println("Inside settlementInitiatorB :: tranAmt"+tranAmt);
-        System.out.println("Inside settlementInitiatorB ::previousAmount)"+previousAmount);
-        System.out.println("Inside settlementInitiatorB :: finalamout"+amount);
+        System.out.println("Amount before settelment for Party B Nostro  ::"+oldIOUState.getAmount());
+        System.out.println("Amount after final settelment for Party B Nostro::"+amount);
 //
         TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0))
                 .addOutputState(newIOUState, NostroContract.NostroContractID)
@@ -73,7 +72,7 @@ public class SettleNostroFlow extends FlowLogic<SignedTransaction> {
                         .map(AbstractParty::getOwningKey)
                         .collect(Collectors.toList()));
 
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+     //   progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
 
         // Step 3: Collect signatures from other participants
@@ -85,7 +84,7 @@ public class SettleNostroFlow extends FlowLogic<SignedTransaction> {
         SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
 
         // Step 4: Finalize the transaction
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+     //   progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
 
 

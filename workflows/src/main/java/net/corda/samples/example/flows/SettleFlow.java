@@ -60,7 +60,8 @@ private final Party borrower;
 
        // System.out.println("Inside settlementInitiatorB :: tranAmt"+tranAmt);
         //System.out.println("Inside settlementInitiatorB ::previousAmount)"+previousAmount);
-        System.out.println("Inside settlementInitiatorB :: finalamout"+amount);
+        System.out.println("Amount before settelment for Party B   ::"+oldIOUState.getAmount());
+        System.out.println("Amount after final settelment for Party B ::"+amount);
 ///.addInputState(responseB)
 TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0));
                 builder.addOutputState(newPartyBalanceStateB, BalanceContractPartyB.BalanceContractPartyBID)
@@ -69,7 +70,7 @@ TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMa
                         .map(AbstractParty::getOwningKey)
                         .collect(Collectors.toList()));
 
-                         progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+                       //  progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
         
         // Step 3: Collect signatures from other participants
@@ -81,10 +82,9 @@ TransactionBuilder builder = new TransactionBuilder(getServiceHub().getNetworkMa
         SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
         
         // Step 4: Finalize the transaction
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        System.out.println("Inside settlementInitiatorB :: finalamout"+amount);
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+
+
 
 return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
     }

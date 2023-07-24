@@ -75,7 +75,7 @@ public class SettleFlowNostroA extends FlowLogic<SignedTransaction> {
         }
 
 
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+       // progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
 
         // Step 3: Collect signatures from other participants
@@ -87,10 +87,10 @@ public class SettleFlowNostroA extends FlowLogic<SignedTransaction> {
         SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
 
         // Step 4: Finalize the transaction
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+       // progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         System.out.println("Final Balance after netting for Party A Nostro "+Valutamountresult);
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+      //  progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
 

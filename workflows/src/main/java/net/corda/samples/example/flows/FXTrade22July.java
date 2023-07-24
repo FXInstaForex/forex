@@ -74,12 +74,12 @@ public class FXTrade22July extends FlowLogic<Void> {
         }
 
         flag = validateNodesAuthenticity(participants);
-        System.out.println("flag after validateNodesAuthenticity called" + flag);
+        System.out.println("Node auntheniticty " + flag);
 
         if (flag) {
         //sign transaction
         signTransaction(otherParty, amount, date);
-        updateBalances(amount,date,otherParty);
+        //updateBalances(amount,date,otherParty);
 
 
 
@@ -179,7 +179,7 @@ public class FXTrade22July extends FlowLogic<Void> {
         boolean validateNodeFlag = false;
         for (AbstractParty node : nodes) {
             if (isWellKnownNodeIdentity(node.nameOrNull())) {
-                System.out.println("The node's identity is known and trusted" + node.nameOrNull());
+                System.out.println("The node's identity is known and trusted ::" + node.nameOrNull());
 
                 validateNodeFlag = true;
             } else {
@@ -188,7 +188,7 @@ public class FXTrade22July extends FlowLogic<Void> {
             }
 
             if(validateNodeFlag){
-                verifyNodeIntegrity(node.nameOrNull(), node.getOwningKey());
+               validateNodeFlag= verifyNodeIntegrity(node.nameOrNull(), node.getOwningKey());
             }
         }
 
@@ -216,7 +216,7 @@ public class FXTrade22July extends FlowLogic<Void> {
 
         PartyAndCertificate nodeCertificate =  getServiceHub().getIdentityService().certificateFromKey(nodeParty.getOwningKey());
         if (nodeCertificate == null) {
-            System.out.println("Certificate not found for node: " + nodeX500Name);
+            System.out.println("Certificate not found for node :: " + nodeX500Name);
             verifiedFlag = false;
         } else {
             verifiedFlag = true;
@@ -247,7 +247,7 @@ public class FXTrade22July extends FlowLogic<Void> {
     }
 
     public boolean verifyKYCtransaction(CordaX500Name nodeX500Name) throws FlowException {
-        System.out.println("I am inside verifyKYCtransaction " + nodeX500Name.toString());
+        System.out.println("Verifying KYC ...");
         boolean verifiedKYC = false;
         String[] tokens = (nodeX500Name.toString()).split(",");
         String[] conutrytoken = tokens[2].split("=");
@@ -255,16 +255,16 @@ public class FXTrade22July extends FlowLogic<Void> {
         List<String> blacklisted= new ArrayList<>();
         blacklisted.add("IR");
         blacklisted.add("SA");
-        System.out.println("countries"+blacklisted.toString());
+        //System.out.println("countries"+blacklisted.toString());
         for (StateAndRef<KYCState> state : states) {
             KYCState iouState = state.getState().getData();
-System.out.println("`````````````````"+iouState.getCountry().getName().toString());
+//System.out.println("`````````````````"+iouState.getCountry().getName().toString());
             if(blacklisted.contains(conutrytoken[1])){
-                System.out.println("ngCountry is blacklisted for trade hence rejecti for Trade" + conutrytoken[1] );
+                System.out.println("Country " + conutrytoken[1]+" is blacklisted for trade hence rejecting for Trade" );
                 throw new FlowException("BlackListed country" + conutrytoken[1]);
             }
             else {
-                System.out.println("Country is valid for trade " + conutrytoken[1]);
+                System.out.println("Country "+ conutrytoken[1]+" is valid for trade " );
                 verifiedKYC = true;
 
 

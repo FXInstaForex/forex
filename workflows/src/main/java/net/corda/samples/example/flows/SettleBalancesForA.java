@@ -73,7 +73,7 @@ private final Party borrower;
 
         double finalamout=0;
 
-        System.out.println("Inside updateLedgerforPartyA");
+        //System.out.println("Inside updateLedgerforPartyA");
         // final Party notary = getServiceHub().getNetworkMapCache().getNotaryIdentities().get(0);
         QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
 
@@ -94,12 +94,12 @@ private final Party borrower;
                 .addInputState(iouStateAndRef)
                 .addOutputState(newIOUState)
                 .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), party.getOwningKey());
-        progressTracker.setCurrentStep(GENERATING_TRANSACTION);
+       // progressTracker.setCurrentStep(GENERATING_TRANSACTION);
         txnBuilder.verify(getServiceHub());
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+        //progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         final SignedTransaction signedTx = getServiceHub().signInitialTransaction(txnBuilder);
         try {
-            progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+        //    progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
             subFlow(new FinalityFlow(signedTx, emptyList()));
         } catch (FlowException e) {
             throw new RuntimeException(e);

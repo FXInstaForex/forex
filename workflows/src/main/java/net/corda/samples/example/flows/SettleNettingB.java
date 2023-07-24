@@ -61,7 +61,7 @@ public class SettleNettingB extends FlowLogic<SignedTransaction> {
 
                 PartyBalanceStateB pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
-                System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
+             //   System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
              //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
                 builder  .addInputState(output)
                         .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new PartyBalanceStateB(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
@@ -77,8 +77,8 @@ public class SettleNettingB extends FlowLogic<SignedTransaction> {
             // You can also log the error or display a more meaningful error message to the users.
         }
 
-
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+        System.out.println("Final Balance after netting for Party B"+Valutamountresult);
+       // progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
 
         // Step 3: Collect signatures from other participants
@@ -90,10 +90,10 @@ public class SettleNettingB extends FlowLogic<SignedTransaction> {
         SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
 
         // Step 4: Finalize the transaction
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+       // progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+      //  System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
+      //  progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
 

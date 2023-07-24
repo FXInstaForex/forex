@@ -65,7 +65,7 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
 
                 NostroState pstate = output.getState().getData();
                 Valutamountresult = Valutamountresult+pstate.getAmount();
-                System.out.println("getting aount from another node ----------------------------------------------------$$" + Valutamountresult);
+
              //   builder.addOutputState(newPartyBalanceStateA, BalanceContractPartyA.BalanceContractPartyAID)
                 builder  .addInputState(output)
                         .addCommand(new BalanceContractPartyA.Commands.UpdateBalance(), new NostroState(Valutamountresult,issuer,"CONSUMED").getParticipants().stream()
@@ -81,8 +81,8 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
             // You can also log the error or display a more meaningful error message to the users.
         }
 
-
-        progressTracker.setCurrentStep(SIGNING_TRANSACTION);
+        System.out.println("Final Balance after netting for Party B"+Valutamountresult);
+       // progressTracker.setCurrentStep(SIGNING_TRANSACTION);
         SignedTransaction signedTransaction = getServiceHub().signInitialTransaction(builder);
 
         // Step 3: Collect signatures from other participants
@@ -94,10 +94,10 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
         SignedTransaction fullySignedTransaction = subFlow(new CollectSignaturesFlow(signedTransaction, sessions));
 
         // Step 4: Finalize the transaction
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+       // progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
-        System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
-        progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
+       // System.out.println("Inside settlementInitiatorB :: finalamout"+Valutamountresult);
+       // progressTracker.setCurrentStep(FINALIZING_TRANSACTION);
 
         return subFlow(new FinalityFlow(fullySignedTransaction, sessions));
 
@@ -105,18 +105,18 @@ public class SettleNettingNostroB extends FlowLogic<SignedTransaction> {
 
     public List<StateAndRef<NostroState>> getAmountfromVaultforPartyBNostro() {
         double balanceAmt = 0;
-        System.out.println("------getAmountfromVaultforPartyBNostro--------");
+       // System.out.println("------getAmountfromVaultforPartyBNostro--------");
 
 
         QueryCriteria.VaultQueryCriteria queryCriteria = new QueryCriteria.VaultQueryCriteria(Vault.StateStatus.UNCONSUMED);
 
         //owner will be party initiating tansaction owner  is
         Vault.Page<NostroState> results = getServiceHub().getVaultService().queryBy(NostroState.class,queryCriteria);
-        System.out.println("------getAmountfromVaultforPartyBNostro--------"+results.toString());
+        //System.out.println("------getAmountfromVaultforPartyBNostro--------"+results.toString());
         List<StateAndRef<NostroState>> states = results.getStates();
         for (StateAndRef<NostroState> state : states) {
             NostroState iouState = state.getState().getData();
-            System.out.println("Balance Amount---NostroState" + iouState.getAmount());
+           // System.out.println("Balance Amount---NostroState" + iouState.getAmount());
             balanceAmt = balanceAmt+iouState.getAmount();
         }
 
