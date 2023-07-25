@@ -10,3 +10,7 @@ WORKDIR /etc
 RUN mkdir -p ./app/forex-v1
 COPY . /etc/app/forex-v1/
 RUN chmod +x /etc/app/forex-v1/VMconnection/scripts/runPartyC.bash
+
+#FROM eclipse-temurin:8-jdk-jammy
+#ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyC/corda.jar"]
+CMD ["/bin/bash","-c","/etc/app/forex-v1/VMconnection/scripts/runPartyC.bash"]
