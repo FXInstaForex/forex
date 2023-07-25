@@ -60,17 +60,17 @@ dependencies {
 task runPartyAServer(type: JavaExec, dependsOn: jar) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'net.corda.samples.obligation.server.Server'
-    args '--server.port=50005', '--config.rpc.host=20.26.210.226', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
+    args '--server.port=50005', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
 }
 
 task runPartyBServer(type: JavaExec, dependsOn: jar) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'net.corda.samples.obligation.server.Server'
-    args '--server.port=50006', '--config.rpc.host=20.26.210.226', '--config.rpc.port=10009', '--config.rpc.username=user1', '--config.rpc.password=test'
+    args '--server.port=50006', '--config.rpc.host=localhost', '--config.rpc.port=10009', '--config.rpc.username=user1', '--config.rpc.password=test'
 }
 
 task runPartyCServer(type: JavaExec, dependsOn: jar) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'net.corda.samples.obligation.server.Server'
-    args '--server.port=50009', '--config.rpc.host=4.194.208.95', '--config.rpc.port=10012', '--config.rpc.username=user1', '--config.rpc.password=test'
+    args '--server.port=50009', '--config.rpc.host=localhost', '--config.rpc.port=10012', '--config.rpc.username=user1', '--config.rpc.password=test'
 }
