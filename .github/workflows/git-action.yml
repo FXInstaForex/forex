@@ -84,9 +84,9 @@ jobs:
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY_VM1 }}"
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull wfsettlement1/fxinsta-sample:PartyA
-          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
+          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement1/fxinsta-sample:PartyA
           docker pull wfsettlement1/fxinsta-sample:PartyB
-          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
+          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement1/fxinsta-sample:PartyB
     - name: Deploy to Azure VM2
       uses: appleboy/ssh-action@master
       with:
@@ -99,7 +99,7 @@ jobs:
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker pull wfsettlement1/fxinsta-sample:PartyC
-          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement/fxinsta-sample:PartyC
+          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement1/fxinsta-sample:PartyC
           docker pull wfsettlement1/fxinsta-sample:Notary
-          docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary          
+          docker run --name fxinsta_notary -d wfsettlement1/fxinsta-sample:Notary          
 #          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
