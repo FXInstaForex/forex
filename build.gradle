@@ -112,16 +112,16 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         notary = [validating : false]
         p2pPort 10002
         rpcSettings {
-            address("4.194.208.95:10003")
-            adminAddress("4.194.208.95:10043")
+            address("localhost:10003")
+            adminAddress("localhost:10043")
         }
     }
     node {
         name "O=PartyA,L=London,C=GB"
         p2pPort 10005
         rpcSettings {
-            address("20.26.210.226:10006")
-            adminAddress("20.26.210.226:10046")
+            address("localhost:10006")
+            adminAddress("localhost:10046")
         }
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
 		extraConfig = [
@@ -139,8 +139,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         name "O=PartyB,L=New York,C=US"
         p2pPort 10008
         rpcSettings {
-            address("20.26.210.226:10009")
-            adminAddress("20.26.210.226:10049")
+            address("localhost:10009")
+            adminAddress("localhost:10049")
         }
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
 		extraConfig = [
