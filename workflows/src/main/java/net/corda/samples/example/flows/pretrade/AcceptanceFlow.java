@@ -71,6 +71,7 @@ public class AcceptanceFlow {
 
             // Finalising the transaction
             SignedTransaction finalisedTx  = subFlow(new FinalityFlow(fullyStx, ImmutableList.of(counterpartySession)));
+            subFlow(new PostTradeFlow(finalisedTx));
             return finalisedTx;
         }
     }
