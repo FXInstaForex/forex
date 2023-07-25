@@ -7,19 +7,12 @@ import net.corda.core.identity.CordaX500Name;
 import net.corda.core.identity.Party;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.NodeInfo;
-import net.corda.core.transactions.SignedTransaction;
-import net.corda.finance.contracts.asset.Cash;
 import net.corda.samples.example.flows.*;
 import net.corda.samples.example.flows.pretrade.AcceptanceFlow;
 import net.corda.samples.example.flows.pretrade.ModificationFlow;
 import net.corda.samples.example.flows.pretrade.ProposalFlow;
 import net.corda.samples.example.states.IOUState;
 import net.corda.samples.example.states.TradeState;
-import net.corda.samples.obligation.flows.IOUIssueFlow;
-import net.corda.samples.obligation.flows.IOUSettleFlow;
-import net.corda.samples.obligation.flows.IOUTransferFlow;
-import net.corda.samples.obligation.flows.SelfIssueCashFlow;
-import net.corda.samples.obligation.states.IOUState;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -37,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.corda.finance.workflows.GetBalances.getCashBalances;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
@@ -146,96 +138,29 @@ public class MainController {
         return myMap;
     }
     @GetMapping(value = "/ious",produces = APPLICATION_JSON_VALUE)
-    public List<StateAndRef<IOUState>> getIOUs() {
+    public List<StateAndRef<TradeState>> getIOUs() {
         // Filter by states type: IOU.
-        return proxy.vaultQuery(IOUState.class).getStates();
-    }
-    @GetMapping(value = "/cash",produces = APPLICATION_JSON_VALUE)
-    public List<StateAndRef<Cash.State>> getCash() {
-        // Filter by states type: Cash.
-        return proxy.vaultQuery(Cash.State.class).getStates();
+        return proxy.vaultQuery(TradeState.class).getStates();
     }
 
-    @GetMapping(value = "/cash-balances",produces = APPLICATION_JSON_VALUE)
-    public Map<Currency,Amount<Currency>> cashBalances(){
-        return getCashBalances(proxy);
-    }
 
-    @PutMapping(value =  "/issue-iou" , produces = TEXT_PLAIN_VALUE )
-    public ResponseEntity<String> issueIOU(@RequestParam(value = "amount") int amount,
-                                           @RequestParam(value = "currency") String currency,
-                                           @RequestParam(value = "party") String party) throws IllegalArgumentException {
-        // Get party objects for myself and the counterparty.
-        Party me = proxy.nodeInfo().getLegalIdentities().get(0);
-        Party lender = Optional.ofNullable(proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(party))).orElseThrow(() -> new IllegalArgumentException("Unknown party name."));
-        // Create a new IOU states using the parameters given.
-        try {
-            IOUState state = new IOUState(new Amount<>((long) amount * 100, Currency.getInstance(currency)), lender, me);
-            // Start the IOUIssueFlow. We block and waits for the flows to return.
-            SignedTransaction result = proxy.startTrackedFlowDynamic(IOUIssueFlow.InitiatorFlow.class, state).getReturnValue().get();
-            // Return the response.
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Transaction id "+ result.getId() +" committed to ledger.\n " + result.getTx().getOutput(0));
-            // For the purposes of this demo app, we do not differentiate by exception type.
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
-        }
-    }
-    @GetMapping(value =  "transfer-iou" , produces =  TEXT_PLAIN_VALUE )
-    public ResponseEntity<String> transferIOU(@RequestParam(value = "id") String id,
-                                              @RequestParam(value = "party") String party) {
-        UniqueIdentifier linearId = new UniqueIdentifier(null,UUID.fromString(id));
-        Party newLender = proxy.wellKnownPartyFromX500Name(CordaX500Name.parse(party));
-        try {
-            proxy.startTrackedFlowDynamic(IOUTransferFlow.InitiatorFlow.class, linearId, newLender).getReturnValue().get();
-            return ResponseEntity.status(HttpStatus.CREATED).body("IOU "+linearId.toString()+" transferred to "+party+".");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+
+
+
+
 
     /**
      * Settles an IOU. Requires cash in the right currency to be able to settle.
      * Example request:
      * curl -X GET 'http://localhost:10007/api/iou/settle-iou?id=705dc5c5-44da-4006-a55b-e29f78955089&amount=98&currency=USD'
      */
-    @GetMapping(value =  "settle-iou" , produces = TEXT_PLAIN_VALUE )
-    public  ResponseEntity<String> settleIOU(@RequestParam(value = "id") String id,
-                                             @RequestParam(value = "amount") int amount,
-                                             @RequestParam(value = "currency") String currency) {
-
-        UniqueIdentifier linearId = new UniqueIdentifier(null, UUID.fromString(id));
-        try {
-            proxy.startTrackedFlowDynamic(IOUSettleFlow.InitiatorFlow.class, linearId,
-                    new Amount<>((long) amount * 100, Currency.getInstance(currency))).getReturnValue().get();
-            return ResponseEntity.status(HttpStatus.CREATED).body(""+ amount+ currency +" paid off on IOU id "+linearId.toString()+".");
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
 
     /**
      * Helper end-point to issue some cash to ourselves.
      * Example request:
      * curl -X GET 'http://localhost:10009/api/iou/self-issue-cash?amount=100&currency=USD'
      */
-    @GetMapping(value =  "self-issue-cash" , produces =  TEXT_PLAIN_VALUE )
-    public ResponseEntity<String> selfIssueCash(@RequestParam(value = "amount") int amount,
-                      @RequestParam(value = "currency") String currency) {
 
-        try {
-            Cash.State cashState = proxy.startTrackedFlowDynamic(SelfIssueCashFlow.class,
-                    new Amount<>((long) amount * 100, Currency.getInstance(currency))).getReturnValue().get();
-            return ResponseEntity.status(HttpStatus.CREATED).body(cashState.toString());
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
     @CrossOrigin("*")
 
     @PostMapping (value = "initialBalanceA/{amt}" , produces =  TEXT_PLAIN_VALUE  )
