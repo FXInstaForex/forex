@@ -13,4 +13,4 @@ RUN chmod +x /etc/app/forex-v1/VMconnection/scripts/runPartyC.bash
 
 #FROM eclipse-temurin:8-jdk-jammy
 #ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyC/corda.jar"]
-CMD ["/bin/bash","-c","/etc/app/forex-v1/VMconnection/scripts/runPartyC.bash"]
+#CMD ["/bin/bash","-c","/etc/app/forex-v1/VMconnection/scripts/runPartyC.bash"]
