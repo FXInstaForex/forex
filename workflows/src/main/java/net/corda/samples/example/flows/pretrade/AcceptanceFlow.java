@@ -16,6 +16,7 @@ import net.corda.core.transactions.SignedTransaction;
 import net.corda.core.transactions.TransactionBuilder;
 import net.corda.core.utilities.ProgressTracker;
 import net.corda.samples.example.contracts.ProposalAndTradeContract;
+import net.corda.samples.example.flows.PostTradeFlow;
 import net.corda.samples.example.states.ProposalState;
 import net.corda.samples.example.states.TradeState;
 import org.jetbrains.annotations.NotNull;
