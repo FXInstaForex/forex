@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Corda App Interaction</title>
+</head>
+<body>
+    <h1>Corda App Interaction</h1>
+
+    <form id="cordaForm">
+        <label for="data">Data:</label>
+        <input type="text" id="data" name="data" required>
+        <br>
+        <button type="button" onclick="submitData()">Submit Data</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        function submitData() {
+            // Fetch data from the form
+            const formData = new FormData(document.getElementById("cordaForm"));
+            const data = formData.get("data");
+			
+            // TODO: Implement logic to interact with Corda app server using an API endpoint
+
+            // Example: Using fetch API to send data to the server
+            // Replace 'your_server_url' with the actual endpoint URL
+            fetch('http://4.194.208.95:50009/me', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*'
+                },
+                //body: JSON.stringify({ data: data })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the response from the server
+                document.getElementById("response").innerText = JSON.stringify(data);
+            })
+            .catch(error => {
+                // Handle errors
+                document.getElementById("response").innerText = "Error: " + error.message;
+            });
+        }
+    </script>
+</body>
+</html>
