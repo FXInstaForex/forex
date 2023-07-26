@@ -4,7 +4,6 @@ FROM ubuntu:latest as builder
 RUN apt-get update                                                             
 RUN apt-get install openssh-server openssh-client -y
 
-CMD ["/usr/sbin/sshd", "-D"]
 
 # Install necessary build tools and dependencies
 RUN apt-get update && apt-get install -y curl
