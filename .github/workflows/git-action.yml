@@ -79,5 +79,6 @@ jobs:
         script: |
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
+          ./misc_scripts/del_images.bash
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker-compose up -d
