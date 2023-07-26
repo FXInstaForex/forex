@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "Forex_Code_v1" ]
+    branches: [ "FXInsta_VM" ]
   pull_request:
-    branches: [ "Forex_Code_v1" ]
+    branches: [ "FXInsta_VM" ]
 
 permissions:
   contents: read
@@ -72,23 +72,14 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}        
 
-    - name: Deploy to Azure VM
-      uses: appleboy/ssh-action@master
+    - name: Start Deployment
+      uses: TapTap21/docker-remote-deployment-action@v1.0
       with:
-        host: ${{ secrets.AZ_VM_IP }}
-        username: ${{ secrets.AZ_VM_USERNAME }}
-        key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          eval "$(ssh-agent)"
-          ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull wfsettlement/fxinsta-sample:PartyA
-          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement/fxinsta-sample:PartyA
-          docker pull wfsettlement/fxinsta-sample:PartyB
-          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement/fxinsta-sample:PartyB
-          docker pull wfsettlement/fxinsta-sample:PartyC
-          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement/fxinsta-sample:PartyC
-          docker pull wfsettlement/fxinsta-sample:Notary
-          docker run --name fxinsta_notary -d wfsettlement/fxinsta-sample:Notary
-#          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
+        remote_docker_host: ${{ secrets.AZ_VM_IP }}
+        ssh_private_key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+        ssh_public_key: ${{ secrets.VM_SSH_PUBLIC_KEY }}
+        stack_file_name: docker-compose.yml
+        docker_login_password: ${{ secrets.DOCKER_PASSWORD }}
+        docker_login_user: ${{ secrets.DOCKER_USERNAME }}
+        docker_login_registry : docker.io
+        args: -p myapp up -d
