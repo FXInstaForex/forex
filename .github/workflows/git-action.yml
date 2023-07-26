@@ -35,7 +35,7 @@ jobs:
     - name: Build and Push Docker Image PartyA
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/FXTrade-VM1
+        image: wfsettlement/fxtrade-vm1
         tags: PartyA     
         dockerfile: ./Dockerfile_PartyA        
         registry: docker.io
@@ -45,7 +45,7 @@ jobs:
     - name: Build and Push Docker Image PartyB
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/FXTrade-VM1
+        image: wfsettlement/fxtrade-vm1
         tags: PartyB
         dockerfile: ./Dockerfile_PartyB        
         registry: docker.io
@@ -55,7 +55,7 @@ jobs:
     - name: Build and Push Docker Image PartyC
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/FXTrade-VM1
+        image: wfsettlement/fxtrade-vm1
         tags: PartyC
         dockerfile: ./Dockerfile_PartyC        
         registry: docker.io
@@ -65,7 +65,7 @@ jobs:
     - name: Build and Push Docker Image Notary
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
-        image: wfsettlement/FXTrade-VM1
+        image: wfsettlement/fxtrade-vm1
         tags: Notary
         dockerfile: ./Dockerfile_Notary
         registry: docker.io
