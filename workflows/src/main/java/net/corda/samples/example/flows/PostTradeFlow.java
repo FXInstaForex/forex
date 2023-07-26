@@ -67,7 +67,7 @@ public class PostTradeFlow extends FlowLogic<Void> {
         List<AbstractParty> participants = null;
         for (TransactionState<ContractState> output : outputs) {
             participants = output.getData().getParticipants();
-            TradeState tradeState= (TradeState) output.getData().getParticipants();
+            TradeState tradeState= (TradeState) output.getData();
             //IOUState iouState = (IOUState) output.getData();
             buyAmount = tradeState.getBuyAmount();
             sellAmount= tradeState.getSellAmount();
