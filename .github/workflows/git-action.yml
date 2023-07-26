@@ -9,9 +9,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "FXInsta_VM1" ]
+    branches: [ "FXTrade_VM1" ]
   pull_request:
-    branches: [ "FXInsta_VM1" ]
+    branches: [ "FXTrade_VM1" ]
 
 permissions:
   contents: read
