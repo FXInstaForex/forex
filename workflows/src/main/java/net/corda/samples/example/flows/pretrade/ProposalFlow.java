@@ -106,8 +106,7 @@ public class ProposalFlow {
             SecureHash txId = subFlow(signTransactionFlow).getId();
 
             SignedTransaction finalisedTx = subFlow(new ReceiveFinalityFlow(counterpartySession, txId));
-            subFlow(new PostTradeFlow(finalisedTx));
-            return finalisedTx;
+             return finalisedTx;
         }
     }
 }
