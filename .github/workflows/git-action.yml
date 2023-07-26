@@ -83,8 +83,8 @@ jobs:
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY_VM1 }}"
           docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker run --name fxinsta_partya -d -p 50005:50005 wfsettlement1/fxinsta-sample:PartyA
-          docker run --name fxinsta_partyb -d -p 50006:50006 wfsettlement1/fxinsta-sample:PartyB
-          docker run --name fxinsta_partyc -d -p 50009:50009 wfsettlement1/fxinsta-sample:PartyC
-          docker run --name fxinsta_notary -d wfsettlement1/fxinsta-sample:Notary           
+          docker run --name fxinsta_partya -d -p 2001:2001 wfsettlement1/fxinsta-sample:PartyA
+          docker run --name fxinsta_partyb -d -p 2002:2002 wfsettlement1/fxinsta-sample:PartyB
+          docker run --name fxinsta_partyc -d -p 2003:2003 wfsettlement1/fxinsta-sample:PartyC
+          docker run --name fxinsta_notary -d wfsettlement1/fxinsta-sample:Notary 
 #          docker run --name fxinsta_postgres -e POSTGRES_PASSWORD=my_password -d -p 5432:5432 postgres:11
