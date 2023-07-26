@@ -4,9 +4,6 @@ FROM ubuntu:latest as builder
 RUN apt-get update                                                             
 RUN apt-get install openssh-server openssh-client -y
 
-ADD . /src                                                                       
-ADD ../../home/ubuntu/.ssh/id_rsa /root/.ssh/id_rsa 
-
 CMD ["/usr/sbin/sshd", "-D"]
 
 # Install necessary build tools and dependencies
