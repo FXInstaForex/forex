@@ -1,34 +1,34 @@
 version: '3'
 services:
   Notary:
-    image: wfsettlement1/fxinsta-sample:Notary
+    image: wfsettlement1/fxtrade-vm1:Notary
     ports:
       - "10003:10003"
     volumes:
       - ./Notary:/etc/corda/
-    command: /etc/app/forex-v1/VMconnection/scripts/runNotary.bash
+    command: /etc/app/forex-v1/scripts/runNotary.bash
 
   PartyA:
-    image: wfsettlement1/fxinsta-sample:PartyA
+    image: wfsettlement1/fxtrade-vm1:PartyA
     ports:
       - "10006:10006"
     volumes:
       - ./PartyA:/etc/corda/
-    command: /etc/app/forex-v1/VMconnection/scripts/runPartyA.bash
+    command: /etc/app/forex-v1/scripts/runPartyA.bash
 
   PartyB:
-    image: wfsettlement1/fxinsta-sample:PartyB
+    image: wfsettlement1/fxtrade-vm1:PartyB
     ports:
       - "10009:10009"
     volumes:
       - ./PartyB:/etc/corda/
-    command: /etc/app/forex-v1/VMconnection/scripts/runPartyB.bash
+    command: /etc/app/forex-v1/scripts/runPartyB.bash
 
   PartyC:
-    image: wfsettlement1/fxinsta-sample:PartyC
+    image: wfsettlement1/fxtrade-vm1:PartyC
     ports:
       - "10012:10012"
     volumes:
       - ./PartyC:/etc/corda/
-    command: /etc/app/forex-v1/VMconnection/scripts/runPartyC.bash
+    command: /etc/app/forex-v1/scripts/runPartyC.bash
     
