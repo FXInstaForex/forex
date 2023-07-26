@@ -29,9 +29,6 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
 
-    - name: Grant execute permission for gradlew      
-      run: chmod +x gradlew
-
     - name: Build and Push Docker Image PartyA
       uses: mr-smithers-excellent/docker-build-push@v6
       with:
@@ -83,3 +80,16 @@ jobs:
         docker_login_user: ${{ secrets.DOCKER_USERNAME }}
         docker_login_registry : docker.io
         args: -p myapp up -d
+        
+    - name: Deploy to Azure VM1
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZ_VM_IP }}
+        username: ${{ secrets.AZ_VM_USERNAME }}
+        key: ${{ secrets.VM_SSH_PRIVATE_KEY}}
+        port: 22
+        script: |
+          eval "$(ssh-agent)"
+          ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker-compose up -d
