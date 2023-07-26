@@ -79,5 +79,5 @@ jobs:
         script: |
           eval "$(ssh-agent)"
           ssh-add - <<<"${{ secrets.VM_SSH_PRIVATE_KEY }}"
-          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker-compose up -d
