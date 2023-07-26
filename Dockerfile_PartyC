@@ -1,16 +1,22 @@
-#FROM ubuntu:22.04
-#FROM gradle:latest AS BUILD
-#RUN chmod +x gradlew
-#RUN ./gradlew build
+FROM ubuntu:latest as builder
 
-#FROM ubuntu:latest
-FROM eclipse-temurin:8-jdk-jammy
-#RUN mkdir -p /etc/app
+#install ssh server
+RUN apt-get update                                                             
+RUN apt-get install python-software-properties python g++ make git-core openssh-server -y
+
+# Install necessary build tools and dependencies
+RUN apt-get update && apt-get install -y curl
+
+RUN curl -L -O https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.12%2B7/OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz \
+    && tar xvzf OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz -C /opt \
+    && rm OpenJDK11U-jdk_x64_linux_hotspot_11.0.12_7.tar.gz
+
+# Set environment variables for Temurin JDK
+ENV JAVA_HOME=/opt/jdk-11.0.12+7
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+#deploy code
 WORKDIR /etc
 RUN mkdir -p ./app/forex-v1
 COPY . /etc/app/forex-v1
 RUN chmod +x /etc/app/forex-v1/scripts/runPartyC.bash
-
-#FROM eclipse-temurin:8-jdk-jammy
-#ENTRYPOINT ["java", "-jar", "/etc/app/VMconnection/PartyC/corda.jar"]
-#CMD ["/bin/bash","-c","/etc/app/forex-v1/VMconnection/scripts/runPartyC.bash"]
