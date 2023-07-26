@@ -4,7 +4,7 @@ services:
     image: wfsettlement/fxtrade-vm1:Notary
     ports:
       - "10003:10003"
-      - "2000:2222"
+      - "2000:22"
     volumes:
       - ./Notary:/etc/corda/
     command: /etc/app/forex-v1/scripts/runNotary.bash
@@ -13,7 +13,7 @@ services:
     image: wfsettlement/fxtrade-vm1:PartyA
     ports:
       - "10006:10006"
-      - "2001:2222"
+      - "2001:22"
     volumes:
       - ./PartyA:/etc/corda/
     command: /etc/app/forex-v1/scripts/runPartyA.bash
@@ -22,7 +22,7 @@ services:
     image: wfsettlement/fxtrade-vm1:PartyB
     ports:
       - "10009:10009"
-      - "2002:2222"
+      - "2002:22"
     volumes:
       - ./PartyB:/etc/corda/
     command: /etc/app/forex-v1/scripts/runPartyB.bash
@@ -31,7 +31,7 @@ services:
     image: wfsettlement/fxtrade-vm1:PartyC
     ports:
       - "10012:10012"
-      - "2003:2222"
+      - "2003:22"
     volumes:
       - ./PartyC:/etc/corda/
     command: /etc/app/forex-v1/scripts/runPartyC.bash
